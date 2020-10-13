@@ -1,5 +1,4 @@
-DESCRIPTION
-    VS-CODE is an IDE(integrated development environment) which helps u to write clean and efficient code with the help of various tools and plugins built-in to the editor itself like 
+VS-CODE is an IDE(integrated development environment) which helps u to write clean and efficient code with the help of various tools and plugins built-in to the editor itself like 
 
         -Intellisense 
             The IntelliSense code editing provides intelligent code completions.When you start scripting in the VS Code, the IntelliSense feature shows auto-completion options suitable for your code context.
@@ -18,8 +17,8 @@ DESCRIPTION
         -Plugins
             VS Code Plugins let you add languages, debuggers, and tools to your installation to support your development workflow.
 
-PLUGINS
-    VS-CODE has a vast marketplace for plugins some of them are
+VS-CODE has a vast marketplace for plugins some of them are
+
         -GitLens
             it is the most powerful git management extensions out there. It lets you check git history, blame information, line and file history, commit searching and many other tools for handling Git.
         
