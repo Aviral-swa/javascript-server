@@ -33,7 +33,8 @@ const numbers1 = [65, 44, 12, 4];
 let myFunction = (item) => {            //method calls a function once for each element
   sum += item;                      //complexity = O(n)
 };
-numbers1.forEach(myFunction);
+const result33 = numbers1.forEach(myFunction);
+console.log("for each", result33)
 console.log("forEach", sum)
 
 //Using concat() method
