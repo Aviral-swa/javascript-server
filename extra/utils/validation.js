@@ -27,14 +27,12 @@ const validateUsers = (user) =>{
     const validUsers = [];
     const invalidUsers = [];
     user.forEach(({traineeEmail, reviewerEmail}) => {
-        validateEmail(traineeEmail) ? validUsers.push(traineeEmail) : invalidUsers.push(traineeEmail)
-        validateEmail(reviewerEmail) ? validUsers.push(reviewerEmail) : invalidUsers.push(reviewerEmail)
+            validateEmail(traineeEmail) ? validUsers.push(traineeEmail) : invalidUsers.push(traineeEmail)
+            validateEmail(reviewerEmail) ? validUsers.push(reviewerEmail) : invalidUsers.push(reviewerEmail)
         }
     )
-    const countValid = validUsers.length;
-    const countInvalid = invalidUsers.length;
-    console.log(`There are ${countValid} valid users:`, validUsers)
-    console.log(`There are ${countInvalid} invalid users:`, invalidUsers)
+    console.log(`There are ${validUsers.length} valid users:`, validUsers)
+    console.log(`There are ${invalidUsers.length} invalid users:`, invalidUsers)
     
 }
 validateUsers(users)
