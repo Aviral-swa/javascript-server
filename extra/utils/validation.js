@@ -1,29 +1,8 @@
-const users = [
-    {
-        traineeEmail: 'aviral.swarnkar@successive.tech',
-        reviewerEmail: 'avinash.thube@successive.tech'
-    },
-    
-    {
-        traineeEmail: 'mudit.rajput@live.in' ,
-        reviewerEmail: 'yogesh.singh@successive.tech'
-    },
-    
-    {
-        traineeEmail: 'nikhil.rawat@gmail.com',
-        reviewerEmail: 'shalu.sharma@successive.tech'
-    }
-    
-];
+import validateEmail from './helper'
 
 
-const validateEmail = (email) => {
-    const regex = /\w+[.]\w+@successive.tech$/i;
-    return regex.test(email)
-}
-
-
-const validateUsers = (user) =>{
+export default function validateUsers(user) {
+    console.log("\n //running validation.js ... \n")
     const validUsers = [];
     const invalidUsers = [];
     user.forEach(({traineeEmail, reviewerEmail}) => {
@@ -35,4 +14,3 @@ const validateUsers = (user) =>{
     console.log(`There are ${invalidUsers.length} invalid users:`, invalidUsers)
     
 }
-validateUsers(users)

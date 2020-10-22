@@ -1,5 +1,6 @@
-function diamond(rows){
+export default function diamond(rows){
     if (rows >= 2 && rows <=10){
+        console.log("print diamond of row: ", rows)
         let s= "";
         let j = rows;
         for(let i=1;i<=rows;i++){
@@ -21,4 +22,3 @@ function diamond(rows){
         console.log("range must be from 2 to 10")
     }
 }
-diamond(process.argv[2])

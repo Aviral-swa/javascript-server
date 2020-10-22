@@ -1,5 +1,6 @@
-function equilateral(rows){
+export default function equilateral(rows){
     if (rows >= 2 && rows <=10){
+        console.log("print equilateral of row: ", rows)
         let s= "";
         let j = rows;
         for(let i=1;i<=rows;i++){
@@ -13,5 +14,3 @@ function equilateral(rows){
         console.log("range must be from 2 to 10")
     }
 }
-
-equilateral(process.argv[2])
