@@ -1,0 +1,25 @@
+{
+  "name": "javascript-server",
+  "version": "1.0.0",
+  "description": "training",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "extra": "babel-node extra"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aviral-swa/javascript-server.git"
+  },
+  "author": "Aviral Swarnkar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aviral-swa/javascript-server/issues"
+  },
+  "homepage": "https://github.com/Aviral-swa/javascript-server#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.1",
+    "@babel/preset-env": "^7.12.1"
+  }
+}

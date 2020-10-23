@@ -1,21 +1,7 @@
-const permissions = {
-    getUsers: {
-        all: ['head-trainer'],
-        read : ['trainee', 'trainer'],
-        write : ['trainer'],
-        delete: []
-    },
-
-    getProduct: {
-        all: ['manager'],
-        read : ['marketingTeam', 'developmentTeam'],
-        write : ['developmentTeam'],
-        delete: []
-    }
-}
-
-const hasPermissions = (moduleName, role, permissionType) => {
+import {permissions} from '../constants'
+export default function hasPermissions(moduleName, role, permissionType) {
     try{
+        console.log("//running permissions.js ... \n")
         if (permissions[moduleName].all.includes(role) || permissions[moduleName][permissionType].includes(role)){  
                 console.log(`${role} has ${permissionType} permissions`)                  
                 return true
@@ -30,7 +16,7 @@ const hasPermissions = (moduleName, role, permissionType) => {
    
 }
  
-hasPermissions("getProduct", "manager", "all")
-hasPermissions("getRelations", "developmentTeam", "write")
-hasPermissions("getUsers", "head-trainer", "write")
-hasPermissions("getUsers", "trainee", "all")
+// hasPermissions("getProduct", "manager", "all")
+// hasPermissions("getRelations", "developmentTeam", "write")
+// hasPermissions("getUsers", "head-trainer", "write")
+// hasPermissions("getUsers", "trainee", "all")
