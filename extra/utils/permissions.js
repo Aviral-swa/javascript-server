@@ -15,8 +15,3 @@ export default function hasPermissions(moduleName, role, permissionType) {
     }
    
 }
- 
-// hasPermissions("getProduct", "manager", "all")
-// hasPermissions("getRelations", "developmentTeam", "write")
-// hasPermissions("getUsers", "head-trainer", "write")
-// hasPermissions("getUsers", "trainee", "all")
