@@ -1,4 +1,2 @@
-import hasPermissions from './permissions';
-import validateUsers from './validation';
-
-export{ hasPermissions, validateUsers };
+export{ default as hasPermissions } from './permissions';
+export{ default as validateUsers } from './validation';
