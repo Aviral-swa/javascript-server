@@ -14,7 +14,7 @@ export const permissions: IPermissions = {
     }
 };
 
-export const users: IUsers = [
+export const users: IUsers[] = [
     {
         traineeEmail: 'aviral.swarnkar@successive.tech',
         reviewerEmail: 'avinash.thube@successive.tech'

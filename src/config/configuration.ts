@@ -1,6 +1,10 @@
-import * as dotenv from 'dotenv';
-const envVars = dotenv.config();
-const config: IConfig = envVars.parsed;
-export default config;
-console.log('config is', config);
-Object.freeze(config);
+import { config } from 'dotenv';
+config();
+const configuration: IConfig = {
+    port: process.env.port,
+    node_env: process.env.node_env
+};
+Object.freeze(configuration);
+console.log('config is', configuration);
+console.log(`config object is frozen: ${Object.isFrozen(configuration)}`);
+export default configuration;

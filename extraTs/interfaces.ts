@@ -18,5 +18,6 @@ type GetProduct = {
 
 
 interface IUsers {
-    [index: number]: {traineeEmail: string; reviewerEmail: string};
+    traineeEmail: string;
+    reviewerEmail: string;
 }
