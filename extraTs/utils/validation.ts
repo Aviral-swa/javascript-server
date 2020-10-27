@@ -1,7 +1,7 @@
 import validateEmail from './helper';
 
 
-export default function validateUsers(user): void {
+export default function validateUsers(user: IUsers[]): void {
     console.log('\n //running validation.js ... \n');
     const validUsers = [];
     const invalidUsers = [];
