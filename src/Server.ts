@@ -11,23 +11,25 @@ class Server {
     public bootstrap() {
         this.initBodyParser();
         this.setupRoutes();
-        return this;
+        return this.app;
     }
 
     public setupRoutes() {
-        this.app.use('/health-check', (req, res) => {
+        const { app } = this;
+
+        app.use('/health-check', (req, res) => {
             res.send('I am OK');
         });
 
-        this.app.use(notFoundRoute);
+        app.use(notFoundRoute);
 
-        this.app.use(errorHandler);
+        app.use(errorHandler);
 
-        return this;
     }
 
     public initBodyParser() {
-        this.app.use(bodyParser.json());
+        const { app } = this;
+        app.use(bodyParser.json());
     }
 
     public run() {
