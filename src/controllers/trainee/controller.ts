@@ -67,7 +67,7 @@ class TraineeController {
         try {
             console.log('inside put method');
 
-            res.send({
+            res.status(200).send({
                 message: 'trainees updated successfully',
                 data: {
                         name: 'Mudit Rajput',
