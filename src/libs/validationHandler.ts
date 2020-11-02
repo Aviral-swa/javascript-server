@@ -9,36 +9,49 @@ export default (config) => (
         const i = 0;
         const keys = config[key];
         const locations = keys.in[i];
-        if ((keys.required) && (req[locations][key] === '')) {
+        let request = req[locations][key];
+        const regex = keys.regex;
+        if ((keys.required) && !(request)) {
             const err = {
                 key: `${key}`,
                 location: `${keys.in}`,
-                errorMessage: `${keys.errorMessage || 'something went wrong'}`
+                errorMessage: `${keys.errorMessage || 'required'}`
                 };
             errors.push(err);
         }
-        if ((!keys.required) && ((req[locations][key] === ''))) {
-            req[locations][key] = keys.default;
+        if ((!keys.required) && !(request)) {
+            return request = keys.default;
         }
         if (
-            (((keys.number) && (Number.isInteger(Number(req[locations][key])))) ||
-            ((keys.string) && !Number.isInteger(Number(req[locations][key])))) ||
-            (!(req.params.id === ''))
+            (((keys.number) && !(Number.isInteger(Number(request)))) ||
+            ((keys.string) && !(typeof request === 'string')))
         ) {
-            console.log(key, 'is valid');
-            console.log(req[locations][key]);
-        }
-        else {
-             const err = {
+            const err = {
                 key: `${key}`,
                 location: `${keys.in}`,
-                errorMessage: `${keys.errorMessage || 'something went wrong'}`
+                errorMessage: `${keys.errorMessage || 'incorrect Type'}`
+                };
+            errors.push(err);
+        }
+        if ((keys.isObject) && !(typeof(request) === 'object')) {
+            const err = {
+                key: `${key}`,
+                location: `${keys.in}`,
+                errorMessage: `${keys.errorMessage || 'not an Object'}`
+                };
+            errors.push(err);
+        }
+        if ((regex) && (!regex.test(request))) {
+            const err = {
+                key: `${key}`,
+                location: `${keys.in}`,
+                errorMessage: `${request} is not valid`
                 };
             errors.push(err);
         }
     });
-    if (!(errors.length === 0)) {
-        console.log(errors);
+    if (errors.length !== 0) {
+        return res.status(400).send(errors);
     }
     next();
 };

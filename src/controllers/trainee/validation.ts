@@ -15,7 +15,7 @@ const config = {
         name: {
             required: true,
             string: true,
-            regex: /\w+/,
+            regex: /[a-z]+[ ][a-z]+$/i,
             in: ['body'],
             errorMessage: 'Name is required',
         },
