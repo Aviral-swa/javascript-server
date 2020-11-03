@@ -8,11 +8,11 @@ const traineeRouter = Router();
 
 traineeRouter.route('/')
     .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), TraineeController.get)
-    .post(validationHandler(config.post), TraineeController.post)
-    .put(validationHandler(config.put), TraineeController.put)
-    .delete(validationHandler(config.delete), TraineeController.delete);
+    .post(authMiddleWare('getUsers', 'write'), validationHandler(config.post), TraineeController.post)
+    .put(authMiddleWare('getUsers', 'all'), validationHandler(config.put), TraineeController.put)
+    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), TraineeController.delete);
 
 traineeRouter.route('/:id')
-    .delete(validationHandler(config.delete), TraineeController.delete);
+    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), TraineeController.delete);
 
 export default traineeRouter;
