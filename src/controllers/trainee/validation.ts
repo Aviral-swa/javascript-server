@@ -4,6 +4,7 @@ const config = {
             required: true,
             string: true,
             in: ['body'],
+            // NOTE: will use later
             custom(value) {
                 console.log('Value', value);
                 throw {
@@ -54,6 +55,7 @@ const config = {
             in: ['body'],
             required: true,
             isObject: true,
+            // NOTE: will use later
             custom(dataToUpdate) {
                 console.log();
             },

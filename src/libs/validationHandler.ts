@@ -45,7 +45,7 @@ export default (config) => (
             const err = {
                 key: `${key}`,
                 location: `${keys.in}`,
-                errorMessage: `${request} is not valid`
+                errorMessage: `${request} must contain a space between first and last name`
                 };
             errors.push(err);
         }
