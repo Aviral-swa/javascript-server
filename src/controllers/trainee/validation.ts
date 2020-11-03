@@ -1,0 +1,66 @@
+const config = {
+    post: {
+        id: {
+            required: true,
+            string: true,
+            in: ['body'],
+            // NOTE: will use later
+            custom(value) {
+                console.log('Value', value);
+                throw {
+                    error: 'Error Occured',
+                    message: 'Message',
+                };
+            },
+        },
+        name: {
+            required: true,
+            string: true,
+            regex: /[a-z]+[ ][a-z]+$/i,
+            in: ['body'],
+            errorMessage: 'Name is required',
+        },
+    },
+
+    delete: {
+        id: {
+            required: true,
+            errorMessage: 'Id is required',
+            in: ['params'],
+        },
+    },
+    get: {
+        skip: {
+            required: false,
+            default: 0,
+            number: true,
+            in: ['query'],
+            errorMessage: 'Skip is invalid',
+        },
+        limit: {
+            required: false,
+            default: 10,
+            number: true,
+            in: ['query'],
+            errorMessage: 'Limit is invalid',
+        },
+    },
+    put: {
+        id: {
+            required: true,
+            string: true,
+            in: ['body']
+        },
+        dataToUpdate: {
+            in: ['body'],
+            required: true,
+            isObject: true,
+            // NOTE: will use later
+            custom(dataToUpdate) {
+                console.log();
+            },
+        },
+    },
+};
+
+export default config;
