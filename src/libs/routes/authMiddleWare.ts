@@ -1,26 +1,35 @@
 import * as jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { default as hasPermissions } from '../permissions';
+import { default as hasPermissions } from '../hasPermissions';
+import configuration from '../../config/configuration';
 
 export default (module: string, permissionType: string) => (req: Request, res: Response, next: NextFunction) => {
-try {
+    const secret_key = configuration.secret_key;
     const auth = 'authorization';
     const token = req.headers[auth];
-    const decodedUser = jwt.verify(token, 'qwertyuiopasdfghjklzxcvbnm123456');
-    const tokenRole = decodedUser.role;
-    if (!hasPermissions(module, tokenRole, permissionType)) {
+    if (!token) {
         next({
-            error: 'Unathorized Access',
+            message: 'Token not found',
+            error: 'Authentication failed',
             status: 403
         });
     }
-    next();
-}
-catch (err) {
-    next({
-        error: 'Unauthenticated Access',
-        status: 403
-    });
-
-}
+    try {
+        const User = jwt.verify(token, secret_key);
+        if (!hasPermissions(module, User.role, permissionType)) {
+            next({
+                message: 'permission not found',
+                error: 'Unauthorized Access',
+                status: 403
+            });
+        }
+        next();
+    }
+    catch (err) {
+        next({
+            message: 'User is unauthorized',
+            error: 'Unauthorized Access',
+            status: 403
+        });
+    }
 };
