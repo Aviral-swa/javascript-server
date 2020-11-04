@@ -7,6 +7,7 @@ export default (module: string, permissionType: string) => (req: Request, res: R
     const secret_key = configuration.secret_key;
     const auth = 'authorization';
     const token = req.headers[auth];
+    let user;
     if (!token) {
         next({
             message: 'Token not found',
@@ -15,15 +16,8 @@ export default (module: string, permissionType: string) => (req: Request, res: R
         });
     }
     try {
-        const User = jwt.verify(token, secret_key);
-        if (!hasPermissions(module, User.role, permissionType)) {
-            next({
-                message: 'permission not found',
-                error: 'Unauthorized Access',
-                status: 403
-            });
-        }
-        next();
+        user = jwt.verify(token, secret_key);
+        console.log(user.role);
     }
     catch (err) {
         next({
@@ -32,4 +26,12 @@ export default (module: string, permissionType: string) => (req: Request, res: R
             status: 403
         });
     }
+    if (!hasPermissions(module, user.role, permissionType)) {
+        next({
+            message: 'permission denied',
+            error: 'Unauthorized Access',
+            status: 403
+        });
+    }
+    next();
 };
