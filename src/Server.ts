@@ -36,8 +36,8 @@ class Server {
     }
 
     public run() {
-        const { port, MONGO_URL} = this.configuration;
-        Database.open(MONGO_URL)
+        const { port, mongo_url} = this.configuration;
+        Database.open(mongo_url)
             .then((res) => {
                 this.app.listen(port, err => {
                     if (err) {
