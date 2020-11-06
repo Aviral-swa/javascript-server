@@ -4,18 +4,17 @@ import IUserModel from './IUserModel';
 
 export default class UserRepository {
 
-    public static getuserObjectId() {
+    public static getUserObjectId() {
         return String(mongoose.Types.ObjectId());
     }
 
     public create(data: any): Promise<IUserModel> {
-        const id = UserRepository.getuserObjectId();
+        const id = UserRepository.getUserObjectId();
         const model = new userModel({
             _id: id,
             ...data,
         });
         return model.save();
-
     }
 
     public count() {

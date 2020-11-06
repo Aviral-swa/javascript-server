@@ -17,7 +17,7 @@ export default (config) => (
                 location: `${keys.in}`,
                 errorMessage: `${keys.errorMessage || 'required'}`
                 };
-            errors.push(err);
+            return errors.push(err);
         }
         if ((!keys.required) && !(request)) {
             return request = keys.default;
@@ -31,7 +31,7 @@ export default (config) => (
                 location: `${keys.in}`,
                 errorMessage: `${keys.errorMessage || 'incorrect Type'}`
                 };
-            errors.push(err);
+            return errors.push(err);
         }
         if ((keys.isObject) && !(typeof(request) === 'object')) {
             const err = {
@@ -39,7 +39,7 @@ export default (config) => (
                 location: `${keys.in}`,
                 errorMessage: `${keys.errorMessage || 'not an Object'}`
                 };
-            errors.push(err);
+            return errors.push(err);
         }
         if ((regex) && (!regex.test(request))) {
             const err = {
@@ -47,7 +47,7 @@ export default (config) => (
                 location: `${keys.in}`,
                 errorMessage: `${request} must contain a space between first and last name`
                 };
-            errors.push(err);
+            return errors.push(err);
         }
     });
     if (errors.length !== 0) {
