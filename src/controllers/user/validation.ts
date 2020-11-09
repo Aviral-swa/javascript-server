@@ -1,23 +1,17 @@
 const config = {
     post: {
-        id: {
+        email: {
             required: true,
             string: true,
+            regex: /\w+[.]\w+@successive.tech$/i,
             in: ['body'],
-            custom(value) {
-                console.log('Value', value);
-                throw {
-                    error: 'Error Occured',
-                    message: 'Message',
-                };
-            },
+            errorMessage: 'Email is required',
         },
-        name: {
+        password: {
             required: true,
             string: true,
-            regex: /[a-z]+[ ][a-z]+$/i,
             in: ['body'],
-            errorMessage: 'Name is required',
+            errorMessage: 'password is required',
         },
     },
 

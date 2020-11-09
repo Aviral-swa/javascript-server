@@ -5,10 +5,11 @@ import validationHandler from '../../libs/validationHandler';
 import authMiddleWare from '../../libs/routes/authMiddleWare';
 
 const userRouter = Router();
-
+userRouter.route('/me')
+    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.get);
+userRouter.route('/login')
+    .post(validationHandler(config.post), UserController.create);
 userRouter.route('/')
-    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.get)
-    .post(authMiddleWare('getUsers', 'write'), validationHandler(config.post), UserController.post)
     .put(authMiddleWare('getUsers', 'all'), validationHandler(config.put), UserController.put)
     .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), UserController.delete);
 

@@ -20,4 +20,8 @@ export default class UserRepository {
     public count() {
         return userModel.countDocuments();
     }
+
+    public static findOne(query): mongoose.DocumentQuery<IUserModel, IUserModel, {}> {
+        return userModel.findOne(query).lean();
+    }
 }
