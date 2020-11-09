@@ -1,4 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
+import * as jwt from 'jsonwebtoken';
+import { configuration } from '../../config';
+import UserRepository from '../../repositories/user/UserRepository';
+import { IRequest } from '../../libs/interfaces';
 
 class UserController {
 
@@ -13,7 +17,7 @@ class UserController {
         return UserController.instance;
     }
 
-    get(req: Request, res: Response, next: NextFunction) {
+    get(req: IRequest, res: Response, next: NextFunction) {
         try {
             console.log('inside get method');
 
@@ -21,8 +25,7 @@ class UserController {
                 message: 'users fethed successfully',
                 data: [
                     {
-                        name: 'Aviral Swarnkar',
-                        address: 'Noida'
+                        user: req.user
                     }
                 ],
                 status: 'success'
@@ -38,30 +41,53 @@ class UserController {
         }
     }
 
-    post(req: Request, res: Response, next: NextFunction) {
+    create(req: IRequest, res: Response, next: NextFunction) {
         try {
-            console.log('inside post method');
+            const secretKey = configuration.secret_key;
+            const payload = {
+                'iss': 'successive technologies',
+                'iat': 1604767536,
+                'exp': 1636303559,
+                'aud': 'peers',
+                'sub': 'profile setup',
+                'email': req.body.email,
+                'password': req.body.password
+            };
+            UserRepository.findOne({email: req.body.email, passsword: req.body.passsword})
+            .then((data) => {
+                if (data === null) {
+                    next({
+                        message: 'user not found',
+                        error: 'Unauthorized Access',
+                        status: 403
+                    });
+                }
+                else {
+                    const token = jwt.sign(payload, secretKey);
+                    res.status(200).send({
+                        message: 'token created successfully',
+                        data: {
+                                generated_token: token
+                            },
+                        status: 'success'
+                    });
+                }})
+                .catch((err) => {
+                    console.log(err);
+                });
 
-            res.status(200).send({
-                message: 'users created successfully',
-                data: {
-                        name: 'Mudit Rajput',
-                        address: 'Noida'
-                    },
-                status: 'success'
-            });
         }
         catch (err) {
-
             return next({
                 error: 'bad request',
                 message: err,
                 status: 400
             });
         }
+
     }
 
-    put(req: Request, res: Response, next: NextFunction) {
+    put(req: IRequest, res: Response, next: NextFunction) {
         try {
             console.log('inside put method');
 
@@ -84,7 +110,7 @@ class UserController {
         }
     }
 
-    delete(req: Request, res: Response, next: NextFunction) {
+    delete(req: IRequest, res: Response, next: NextFunction) {
         try {
             console.log('inside delete method');
 
