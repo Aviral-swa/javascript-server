@@ -42,13 +42,12 @@ export default (module: string, permissionType: string) => async (
         }
 
     }
-        catch (err) {
-            next({
-                message: 'user is unauthorized',
-                error: 'Unauthorized Access',
-                status: 403,
-            });
-        }
-
+    catch (err) {
+        next({
+            message: 'user is unauthorized',
+            error: 'Unauthorized Access',
+            status: 403,
+        });
+    }
     next();
 };

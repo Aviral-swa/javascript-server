@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { configuration } from '../../config';
 import UserRepository from '../../repositories/user/UserRepository';
 import { IRequest } from '../../libs/interfaces';
+import { payload } from './constants';
 
 class UserController {
 
@@ -44,17 +45,12 @@ class UserController {
     create(req: IRequest, res: Response, next: NextFunction) {
         try {
             const secretKey = configuration.secret_key;
-            const payload = {
-                'iss': 'successive technologies',
-                'iat': 1604767536,
-                'exp': 1636303559,
-                'aud': 'peers',
-                'sub': 'profile setup',
-                'email': req.body.email,
-                'password': req.body.password
-            };
-            UserRepository.findOne({email: req.body.email, passsword: req.body.passsword})
+            payload.email = req.body.email;
+            payload.password = req.body.password;
+            console.log(payload);
+            UserRepository.findOne({password: req.body.password, email: req.body.email})
             .then((data) => {
+                console.log(data);
                 if (data === null) {
                     next({
                         message: 'user not found',
