@@ -6,11 +6,13 @@ import authMiddleWare from '../../libs/routes/authMiddleWare';
 
 const userRouter = Router();
 userRouter.route('/me')
-    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.get);
+    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.me);
 userRouter.route('/login')
-    .post(validationHandler(config.post), UserController.create);
+    .post(validationHandler(config.post), UserController.login);
 userRouter.route('/')
     .put(authMiddleWare('getUsers', 'all'), validationHandler(config.put), UserController.put)
+    .post(authMiddleWare('getUsers', 'write'), validationHandler(config.delete), UserController.create)
+    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.delete), UserController.get)
     .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), UserController.delete);
 
 userRouter.route('/:id')

@@ -6,6 +6,13 @@ import authMiddleWare from '../../libs/routes/authMiddleWare';
 
 const traineeRouter = Router();
 
+traineeRouter.route('/v')
+    .get(TraineeController.getUsers );
+traineeRouter.route('/v')
+    .post(TraineeController.createUsers );
+traineeRouter.route('/v')
+    .put(TraineeController.createUsers );
+
 traineeRouter.route('/')
     .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), TraineeController.get)
     .post(authMiddleWare('getUsers', 'write'), validationHandler(config.post), TraineeController.post)

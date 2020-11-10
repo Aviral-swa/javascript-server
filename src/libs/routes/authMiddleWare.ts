@@ -32,7 +32,6 @@ export default (module: string, permissionType: string) => async (
         }
         dbUser = await UserRepository.findOne({email: user.email, passsword: user.passsword});
         req.user = dbUser;
-        console.log(dbUser);
         if (!hasPermissions(module, dbUser.role, permissionType)) {
             next({
                 message: 'permission denied',
