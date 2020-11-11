@@ -30,8 +30,4 @@ export default class UserRepository extends VersionableRepository<IUserModel, mo
         return userModel.findOne(query).lean();
     }
 
-    // public findAll(query: any, projection: any, options: any): mongoose.DocumentQuery<IUserModel, IUserModel, {}> {
-    //     const finalQuery = {deletedAt: undefined, ...query};
-    //     return this.find(finalQuery, projection, options);
-    // }
 }

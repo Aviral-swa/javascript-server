@@ -33,10 +33,18 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         const finalQuery = {deletedAt: undefined, ...query};
         return this.model.find(finalQuery, projection, options);
     }
-    // ERROR
-    // public invalidate(id: string): DocumentQuery<D, D> {
-    //     return this.model.updateMany({}, { deletedAt: Date.now() } );
-    // }
+    public async delete(id: any): Promise<D> {
+        const previous = await this.findOne({ originalId: id, deletedAt: undefined});
+        console.log('previous: ', previous);
+        if (previous) {
+            return await this.invalidate(id);
+        }
+    }
+    public invalidate(id: string): DocumentQuery<D, D> {
+        const query: any = {originalId: id, deletedAt: undefined};
+        const data: any = {deletedAt: Date.now()};
+        return this.model.updateMany(query , data);
+    }
     public async update(data: any): Promise<D> {
         const previous = await this.findOne({ originalId: data.originalId, deletedAt: undefined});
         console.log('previous: ', previous);

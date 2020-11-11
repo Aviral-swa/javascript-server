@@ -18,30 +18,7 @@ class UserController {
         return UserController.instance;
     }
 
-    get(req: IRequest, res: Response, next: NextFunction) {
-        try {
-            console.log('inside get method');
-
-            res.status(200).send({
-                message: 'users fetched successfully',
-                data: {
-                        name: 'Mudit Rajput',
-                        address: 'Bijnor'
-                    },
-                status: 'success'
-            });
-        }
-        catch (err) {
-
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-    }
-
-    me(req: IRequest, res: Response, next: NextFunction) {
+   me(req: IRequest, res: Response, next: NextFunction) {
         try {
             console.log('inside me method');
             delete req.user.password;
@@ -95,72 +72,6 @@ class UserController {
 
         }
         catch (err) {
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-
-    }
-    create(req: IRequest, res: Response, next: NextFunction) {
-        try {
-            console.log('inside create method');
-
-            res.status(200).send({
-                message: 'users updated successfully',
-                data: {
-                        name: 'Mudit Rajput',
-                        address: 'Bijnor'
-                    },
-                status: 'success'
-            });
-        }
-        catch (err) {
-
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-    }
-
-    put(req: IRequest, res: Response, next: NextFunction) {
-        try {
-            console.log('inside put method');
-
-            res.status(200).send({
-                message: 'users updated successfully',
-                data: {
-                        name: 'Mudit Rajput',
-                        address: 'Bijnor'
-                    },
-                status: 'success'
-            });
-        }
-        catch (err) {
-
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-    }
-
-    delete(req: IRequest, res: Response, next: NextFunction) {
-        try {
-            console.log('inside delete method');
-
-            res.status(200).send({
-                message: 'users deleted successfully',
-                data: {},
-                status: 'success'
-            });
-        }
-        catch (err) {
-
             return next({
                 error: 'bad request',
                 message: err,

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import UserRepository from '../../repositories/user/UserRepository';
+import { ICreate } from '../../libs/interfaces';
 
 class TraineeController {
 
@@ -14,7 +15,7 @@ class TraineeController {
         return TraineeController.instance;
     }
 
-    getUsers(req: Request, res: Response, next: NextFunction) {
+    get(req: Request, res: Response, next: NextFunction) {
         try {
             console.log('inside get method');
             const extractUser: UserRepository = new UserRepository();
@@ -47,39 +48,11 @@ class TraineeController {
         }
     }
 
-    get(req: Request, res: Response, next: NextFunction) {
-        try {
-            console.log('inside post method');
-
-            res.status(200).send({
-                message: 'trainees fetched successfully',
-                data: {
-                        name: 'Aviral Swarnkar',
-                        address: 'Noida'
-                    },
-                status: 'success'
-            });
-        }
-        catch (err) {
-
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-    }
-
-    createUsers(req: Request, res: Response, next: NextFunction) {
+    create(req: Request, res: Response, next: NextFunction) {
         try {
             console.log('inside post method');
             const extractUser: UserRepository = new UserRepository();
-            extractUser.createUsers({
-                name: 'traine123',
-                email: 'traine.123@successive.tech',
-                role: 'trainee',
-                password: 'qazwsxedc'
-            });
+            extractUser.createUsers(req.body);
         }
         catch (err) {
             return next({
@@ -89,47 +62,24 @@ class TraineeController {
             });
         }
             res.status(200).send({
-                message: 'trainees created successfully',
+                message: 'trainee created successfully',
                 data: {
-                        name: 'Mudit Rajput',
-                        address: 'Noida'
+                        Trainee: req.body,
                     },
                 status: 'success'
             });
     }
 
-    post(req: Request, res: Response, next: NextFunction) {
-        try {
-            console.log('inside post method');
-
-            res.status(200).send({
-                message: 'trainees created successfully',
-                data: {
-                        name: 'Mudit Rajput',
-                        address: 'Noida'
-                    },
-                status: 'success'
-            });
-        }
-        catch (err) {
-
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-    }
-
-    put(req: Request, res: Response, next: NextFunction) {
+    update(req: Request, res: Response, next: NextFunction) {
         try {
             console.log('inside put method');
+            const extractUser: UserRepository = new UserRepository();
+            extractUser.update(req.body);
 
             res.status(200).send({
                 message: 'trainees updated successfully',
                 data: {
-                        name: 'Mudit Rajput',
-                        address: 'Bijnor'
+                        updated: req.body,
                     },
                 status: 'success'
             });
@@ -147,10 +97,14 @@ class TraineeController {
     delete(req: Request, res: Response, next: NextFunction) {
         try {
             console.log('inside delete method');
+            const extractUser: UserRepository = new UserRepository();
+            extractUser.delete(req.params.id);
 
             res.status(200).send({
-                message: 'trainees deleted successfully',
-                data: {},
+                message: 'trainee deleted successfully',
+                data: {
+                        originalId: req.params.id
+                },
                 status: 'success'
             });
         }
