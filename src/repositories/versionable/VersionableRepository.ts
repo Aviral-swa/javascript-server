@@ -33,9 +33,8 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         const finalQuery = {deletedAt: undefined, ...query};
         return this.model.find(finalQuery, projection, options);
     }
-    public async delete(id: any): Promise<D> {
+    public async delete(id: string): Promise<D> {
         const previous = await this.findOne({ originalId: id, deletedAt: undefined});
-        console.log('previous: ', previous);
         if (previous) {
             return await this.invalidate(id);
         }
