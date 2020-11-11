@@ -15,6 +15,10 @@ export default class VersionableSchema extends mongoose.Schema {
             originalId: {
                 required: true,
                 type: String,
+            },
+            updatedAt: {
+                required: false,
+                type: Date,
             }
         }, options);
         super(versionedOptions, collections);

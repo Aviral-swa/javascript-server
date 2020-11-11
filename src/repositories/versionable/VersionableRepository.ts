@@ -44,11 +44,15 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         const data: any = {deletedAt: Date.now()};
         return this.model.updateMany(query , data);
     }
+    public invalidateUpdate(id: string): DocumentQuery<D, D> {
+        const query: any = {originalId: id, deletedAt: undefined, updatedAt: undefined};
+        const data: any = {deletedAt: Date.now(), updatedAt: Date.now()};
+        return this.model.updateMany(query , data);
+    }
     public async update(data: any): Promise<D> {
         const previous = await this.findOne({ originalId: data.originalId, deletedAt: undefined});
-        console.log('previous: ', previous);
         if (previous) {
-            await this.invalidate(data.originalId);
+            await this.invalidateUpdate(data.originalId);
         }
         else {
             return undefined;
@@ -56,6 +60,7 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         const newData = Object.assign(JSON.parse(JSON.stringify(previous)), data);
         newData._id = VersionableRepository.generateObjectId();
         delete newData.deletedAt;
+        newData.updatedAt = Date.now();
         const model = new this.model(newData);
         return model.save();
     }
