@@ -20,7 +20,7 @@ class TraineeController {
     public get = (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            this.userRepository.find({}, (err, data) => {
+            this.userRepository.get({}, (err, data) => {
                 if (err) {
                     console.log(err);
                 }
@@ -52,7 +52,7 @@ class TraineeController {
     public create = (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
-            this.userRepository.createUsers(req.body);
+            this.userRepository.create(req.body);
         }
         catch (err) {
             return next({
