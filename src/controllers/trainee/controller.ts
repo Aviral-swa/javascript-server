@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import UserRepository from '../../repositories/user/UserRepository';
-import { ICreate } from '../../libs/interfaces';
-
 class TraineeController {
 
     static instance: TraineeController;
@@ -14,12 +12,15 @@ class TraineeController {
         TraineeController.instance = new TraineeController();
         return TraineeController.instance;
     }
+    private userRepository: UserRepository;
+    constructor() {
+        this.userRepository = new UserRepository();
+    }
 
-    get(req: Request, res: Response, next: NextFunction) {
+    public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            const extractUser: UserRepository = new UserRepository();
-            extractUser.find({}, (err, data) => {
+            this.userRepository.find({}, (err, data) => {
                 if (err) {
                     console.log(err);
                 }
@@ -48,11 +49,10 @@ class TraineeController {
         }
     }
 
-    create(req: Request, res: Response, next: NextFunction) {
+    public create = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
-            const extractUser: UserRepository = new UserRepository();
-            extractUser.createUsers(req.body);
+            this.userRepository.createUsers(req.body);
         }
         catch (err) {
             return next({
@@ -70,11 +70,10 @@ class TraineeController {
             });
     }
 
-    update(req: Request, res: Response, next: NextFunction) {
+    public update = async (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
-            const extractUser: UserRepository = new UserRepository();
-            extractUser.update(req.body);
+            this.userRepository.update(req.body);
 
             res.status(200).send({
                 message: 'trainees updated successfully',
@@ -94,11 +93,10 @@ class TraineeController {
         }
     }
 
-    delete(req: Request, res: Response, next: NextFunction) {
+    public delete = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
-            const extractUser: UserRepository = new UserRepository();
-            extractUser.delete(req.params.id);
+            this.userRepository.delete(req.params.id);
 
             res.status(200).send({
                 message: 'trainee deleted successfully',

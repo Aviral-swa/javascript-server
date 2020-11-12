@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import { DocumentQuery, Query } from 'mongoose';
-import { ICreate } from '../../libs/interfaces';
 
 export default class VersionableRepository <D extends mongoose.Document, M extends mongoose.Model<D>> {
     public static generateObjectId() {
@@ -12,7 +11,7 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
     constructor(model) {
         this.model = model;
     }
-    public async createUsers(data: ICreate): Promise<D> {
+    public async createUsers(data: any): Promise<D> {
         const id = VersionableRepository.generateObjectId();
         const model = new this.model({
             ...data,
