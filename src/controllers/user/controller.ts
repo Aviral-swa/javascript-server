@@ -18,10 +18,10 @@ class UserController {
         return UserController.instance;
     }
 
-    get(req: IRequest, res: Response, next: NextFunction) {
+   me(req: IRequest, res: Response, next: NextFunction) {
         try {
-            console.log('inside get method');
-
+            console.log('inside me method');
+            delete req.user.password;
             res.status(200).send({
                 message: 'users fethed successfully',
                 data: [
@@ -42,15 +42,13 @@ class UserController {
         }
     }
 
-    create(req: IRequest, res: Response, next: NextFunction) {
+    login(req: IRequest, res: Response, next: NextFunction) {
         try {
             const secretKey = configuration.secret_key;
             payload.email = req.body.email;
             payload.password = req.body.password;
-            console.log(payload);
             UserRepository.findOne({password: req.body.password, email: req.body.email})
             .then((data) => {
-                console.log(data);
                 if (data === null) {
                     next({
                         message: 'user not found',
@@ -74,50 +72,6 @@ class UserController {
 
         }
         catch (err) {
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-
-    }
-
-    put(req: IRequest, res: Response, next: NextFunction) {
-        try {
-            console.log('inside put method');
-
-            res.status(200).send({
-                message: 'users updated successfully',
-                data: {
-                        name: 'Mudit Rajput',
-                        address: 'Bijnor'
-                    },
-                status: 'success'
-            });
-        }
-        catch (err) {
-
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
-    }
-
-    delete(req: IRequest, res: Response, next: NextFunction) {
-        try {
-            console.log('inside delete method');
-
-            res.status(200).send({
-                message: 'users deleted successfully',
-                data: {},
-                status: 'success'
-            });
-        }
-        catch (err) {
-
             return next({
                 error: 'bad request',
                 message: err,

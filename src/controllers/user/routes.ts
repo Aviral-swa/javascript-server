@@ -6,14 +6,8 @@ import authMiddleWare from '../../libs/routes/authMiddleWare';
 
 const userRouter = Router();
 userRouter.route('/me')
-    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.get);
+    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.me);
 userRouter.route('/login')
-    .post(validationHandler(config.post), UserController.create);
-userRouter.route('/')
-    .put(authMiddleWare('getUsers', 'all'), validationHandler(config.put), UserController.put)
-    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), UserController.delete);
-
-userRouter.route('/:id')
-    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), UserController.delete);
+    .post(validationHandler(config.post), UserController.login);
 
 export default userRouter;
