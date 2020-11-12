@@ -17,7 +17,7 @@ class TraineeController {
         this.userRepository = new UserRepository();
     }
 
-    public get = async (req: Request, res: Response, next: NextFunction) => {
+    public get = (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
             this.userRepository.find({}, (err, data) => {
@@ -49,7 +49,7 @@ class TraineeController {
         }
     }
 
-    public create = async (req: Request, res: Response, next: NextFunction) => {
+    public create = (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
             this.userRepository.createUsers(req.body);
@@ -70,7 +70,7 @@ class TraineeController {
             });
     }
 
-    public update = async (req: Request, res: Response, next: NextFunction) =>  {
+    public update = (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
             this.userRepository.update(req.body);
@@ -93,7 +93,7 @@ class TraineeController {
         }
     }
 
-    public delete = async (req: Request, res: Response, next: NextFunction) => {
+    public delete = (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
             this.userRepository.delete(req.params.id);

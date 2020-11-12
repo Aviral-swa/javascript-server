@@ -12,7 +12,7 @@ export default class UserRepository extends VersionableRepository<IUserModel, mo
         return String(mongoose.Types.ObjectId());
     }
 
-    public create(data: any): Promise<IUserModel> {
+    public createUsers(data: any): Promise<IUserModel> {
         const id = UserRepository.getUserObjectId();
         const model = new userModel({
             _id: id,
