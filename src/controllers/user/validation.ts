@@ -3,7 +3,7 @@ const config = {
         email: {
             required: true,
             string: true,
-            regex: /\w+[.]\w+@successive.tech$/i,
+            regex: /\w+@successive.tech$/i,
             in: ['body'],
             errorMessage: 'Email is required',
         },

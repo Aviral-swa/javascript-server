@@ -1,10 +1,9 @@
 const config = {
-    post: {
-        id: {
+    create: {
+        password: {
             required: true,
             string: true,
             in: ['body'],
-            // NOTE: will use later
             custom(value) {
                 console.log('Value', value);
                 throw {
@@ -13,12 +12,12 @@ const config = {
                 };
             },
         },
-        name: {
+        email: {
             required: true,
             string: true,
-            regex: /[a-z]+[ ][a-z]+$/i,
+            regex: /\w+@successive.tech$/i,
             in: ['body'],
-            errorMessage: 'Name is required',
+            errorMessage: 'email is required',
         },
     },
 
@@ -45,8 +44,8 @@ const config = {
             errorMessage: 'Limit is invalid',
         },
     },
-    put: {
-        id: {
+    update: {
+        originalId: {
             required: true,
             string: true,
             in: ['body']
@@ -55,7 +54,6 @@ const config = {
             in: ['body'],
             required: true,
             isObject: true,
-            // NOTE: will use later
             custom(dataToUpdate) {
                 console.log();
             },

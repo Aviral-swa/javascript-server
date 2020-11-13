@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import UserRepository from '../../repositories/user/UserRepository';
+import * as bcrypt from 'bcrypt';
 class TraineeController {
 
     static instance: TraineeController;
@@ -17,26 +18,20 @@ class TraineeController {
         this.userRepository = new UserRepository();
     }
 
-    public get = (req: Request, res: Response, next: NextFunction) => {
+
+    public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            this.userRepository.get({}, (err, data) => {
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                        res.status(200).send({
-                        message: 'trainees fethed successfully',
-                        data: [
-                            {
-                                allUsers: data
-                            }
-                        ],
-                        status: 'success'
-                    });
-                }
+            const data = await this.userRepository.get({});
+                res.status(200).send({
+                message: 'trainees fethed successfully',
+                data: [
+                    {
+                        allUsers: data
+                    }
+                ],
+                status: 'success'
             });
-
 
         }
         catch (err) {
@@ -49,9 +44,11 @@ class TraineeController {
         }
     }
 
-    public create = (req: Request, res: Response, next: NextFunction) => {
+    public create = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
+            const hashPass = await bcrypt.hash(req.body.password, 10);
+            req.body.password = hashPass;
             this.userRepository.create(req.body);
         }
         catch (err) {
@@ -74,7 +71,6 @@ class TraineeController {
         try {
             console.log('inside put method');
             this.userRepository.update(req.body);
-
             res.status(200).send({
                 message: 'trainees updated successfully',
                 data: {
@@ -97,7 +93,6 @@ class TraineeController {
         try {
             console.log('inside delete method');
             this.userRepository.delete(req.params.id);
-
             res.status(200).send({
                 message: 'trainee deleted successfully',
                 data: {
