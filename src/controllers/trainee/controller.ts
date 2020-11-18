@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import UserRepository from '../../repositories/user/UserRepository';
+import TraineeRepository from '../../repositories/trainee/TraineeRepository';
 import * as bcrypt from 'bcrypt';
 class TraineeController {
 
@@ -13,16 +13,16 @@ class TraineeController {
         TraineeController.instance = new TraineeController();
         return TraineeController.instance;
     }
-    private userRepository: UserRepository;
+    private traineeRepository: TraineeRepository;
     constructor() {
-        this.userRepository = new UserRepository();
+        this.traineeRepository = new TraineeRepository();
     }
 
 
     public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            const data = await this.userRepository.get({});
+            const data = await this.traineeRepository.get({});
                 res.status(200).send({
                 message: 'trainees fethed successfully',
                 data: [
@@ -49,32 +49,32 @@ class TraineeController {
             console.log('inside post method');
             const hashPass = await bcrypt.hash(req.body.password, 10);
             req.body.password = hashPass;
-            this.userRepository.create(req.body);
-        }
-        catch (err) {
-            return next({
-                error: 'bad request',
-                message: err,
-                status: 400
-            });
-        }
+            const result = await this.traineeRepository.create(req.body);
             res.status(200).send({
                 message: 'trainee created successfully',
                 data: {
-                        Trainee: req.body,
+                        Trainee: result,
                     },
                 status: 'success'
             });
+        }
+        catch (err) {
+            return next({
+                error: 'bad request',
+                message: err,
+                status: 400
+            });
+        }
     }
 
-    public update = (req: Request, res: Response, next: NextFunction) =>  {
+    public update = async (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
-            this.userRepository.update(req.body);
+            const result = await this.traineeRepository.update(req.body);
             res.status(200).send({
                 message: 'trainees updated successfully',
                 data: {
-                        updated: req.body,
+                        updated: result,
                     },
                 status: 'success'
             });
@@ -89,10 +89,10 @@ class TraineeController {
         }
     }
 
-    public delete = (req: Request, res: Response, next: NextFunction) => {
+    public delete = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
-            this.userRepository.delete(req.params.id);
+            await this.traineeRepository.delete(req.params.id);
             res.status(200).send({
                 message: 'trainee deleted successfully',
                 data: {

@@ -5,8 +5,8 @@ const configuration: IConfig = {
     node_env: process.env.NODE_ENV,
     secret_key: process.env.SECRET_KEY,
     mongo_url: process.env.MONGO_URL,
-    userPassword1: process.env.USER_PASSWORD_1,
-    userPassword2: process.env.USER_PASSWORD_2
+    traineePassword: process.env.TRAINEE_PASSWORD,
+    trainerPassword: process.env.TRAINER_PASSWORD
 };
 Object.freeze(configuration);
 console.log('config is', configuration);
