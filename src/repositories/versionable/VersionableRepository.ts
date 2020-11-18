@@ -28,9 +28,9 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         const finalQuery = {deletedAt: undefined, ...query};
         return this.model.findOne(finalQuery);
     }
-    public get(query: any): DocumentQuery<D[], D> {
+    public get(query: any, skip: number, limit: number): DocumentQuery<D[], D> {
         const finalQuery = {deletedAt: undefined, ...query};
-        return this.model.find(finalQuery);
+        return this.model.find(finalQuery).sort({'name': -1}).skip(skip).limit(limit);
     }
     public async delete(id: string): Promise<D> {
         const previous = await this.findOne({ originalId: id, deletedAt: undefined});
