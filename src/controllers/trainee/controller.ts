@@ -22,14 +22,10 @@ class TraineeController {
     public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            const data = await this.traineeRepository.get({});
+            const result = await this.traineeRepository.get({});
                 res.status(200).send({
                 message: 'trainees fethed successfully',
-                data: [
-                    {
-                        allUsers: data
-                    }
-                ],
+                data: result,
                 status: 'success'
             });
 
@@ -52,9 +48,7 @@ class TraineeController {
             const result = await this.traineeRepository.create(req.body);
             res.status(200).send({
                 message: 'trainee created successfully',
-                data: {
-                        Trainee: result,
-                    },
+                data: result,
                 status: 'success'
             });
         }
@@ -73,9 +67,7 @@ class TraineeController {
             const result = await this.traineeRepository.update(req.body);
             res.status(200).send({
                 message: 'trainees updated successfully',
-                data: {
-                        updated: result,
-                    },
+                data: result,
                 status: 'success'
             });
         }
@@ -95,9 +87,7 @@ class TraineeController {
             await this.traineeRepository.delete(req.params.id);
             res.status(200).send({
                 message: 'trainee deleted successfully',
-                data: {
-                        originalId: req.params.id
-                },
+                data: {},
                 status: 'success'
             });
         }

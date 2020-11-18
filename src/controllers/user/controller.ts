@@ -59,7 +59,7 @@ class UserController {
             const match = await bcrypt.compare(req.body.password, data.password);
             if (match) {
                 const token = jwt.sign(payload, secretKey, { expiresIn: '900s' });
-                res.status(200).send({
+                 return res.status(200).send({
                     message: 'token created successfully',
                     data: {
                             generated_token: token
@@ -67,13 +67,11 @@ class UserController {
                     status: 'success'
                 });
             }
-            else {
-                next({
-                    message: 'Password is incorrect',
-                    error: 'Unauthorized Access',
-                    status: 403
-                });
-            }
+            next({
+                message: 'Password is incorrect',
+                error: 'Unauthorized Access',
+                status: 403
+            });
 
         }
         catch (err) {

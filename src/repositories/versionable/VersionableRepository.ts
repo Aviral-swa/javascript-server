@@ -57,6 +57,6 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         delete newData.deletedAt;
         newData.updatedAt = Date.now();
         const model = new this.model(newData);
-        return model.save();
+        return await model.save();
     }
 }
