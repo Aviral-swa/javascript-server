@@ -1,19 +1,38 @@
 import * as bcrypt from 'bcrypt';
 import UserRepository from '../repositories/user/UserRepository';
-import { seedData1, seedData2 } from './constants';
+import TraineeRepository from '../repositories/trainee/TraineeRepository';
+import { traineeSeedData, trainerSeedData } from './constants';
 
 const userRepository: UserRepository = new UserRepository();
-export default async function seed() {
+export async function userSeed() {
     const count = await userRepository.count();
     if (count === 0) {
         try {
             console.log('Seeding Data');
-            const hashPass1 = await bcrypt.hash(seedData1.password, 10);
-            seedData1.password = hashPass1;
-            const hashPass2 = await bcrypt.hash(seedData2.password, 10);
-            seedData2.password = hashPass2;
-            userRepository.create(seedData1);
-            userRepository.create(seedData2);
+            const traineeHash = await bcrypt.hash(traineeSeedData.password, 10);
+            traineeSeedData.password = traineeHash;
+            const trainerHash = await bcrypt.hash(trainerSeedData.password, 10);
+            trainerSeedData.password = trainerHash;
+            userRepository.create(traineeSeedData);
+            userRepository.create(trainerSeedData);
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+}
+const traineeRepository: TraineeRepository = new TraineeRepository();
+export async function traineeSeed() {
+    const count = await traineeRepository.countAll();
+    if (count === 0) {
+        try {
+            console.log('Seeding Data');
+            const traineeHash = await bcrypt.hash(traineeSeedData.password, 10);
+            traineeSeedData.password = traineeHash;
+            const trainerHash = await bcrypt.hash(trainerSeedData.password, 10);
+            trainerSeedData.password = trainerHash;
+            traineeRepository.create(traineeSeedData);
+            traineeRepository.create(trainerSeedData);
 
         } catch (err) {
             console.log(err);

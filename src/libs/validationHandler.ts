@@ -20,7 +20,7 @@ export default (config) => (
             return errors.push(err);
         }
         if ((!keys.required) && !(request)) {
-            return request = keys.default;
+            request = keys.default;
         }
         if (
             (((keys.number) && !(Number.isInteger(Number(request)))) ||
@@ -49,6 +49,7 @@ export default (config) => (
                 };
             return errors.push(err);
         }
+        res.locals[key] = Number(request);
     });
     if (errors.length !== 0) {
         return res.status(400).send(errors);

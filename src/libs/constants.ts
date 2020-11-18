@@ -17,15 +17,15 @@ export const permissions: IPermissions = {
     }
 };
 
-export const seedData1 = {
+export const traineeSeedData = {
     name: 'Aviral Swarnkar',
     email: 'aviral.swarnkar@successive.tech',
     role: 'trainee',
-    password: configuration.userPassword1
+    password: configuration.traineePassword
 };
-export const seedData2 = {
+export const trainerSeedData = {
     name: 'Head Trainer',
     email: 'trainer@successive.tech',
     role: 'head-trainer',
-    password: configuration.userPassword2
+    password: configuration.trainerPassword
 };
