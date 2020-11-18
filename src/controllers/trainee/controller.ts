@@ -25,7 +25,7 @@ class TraineeController {
             const page = parseInt(req.query.page as string, 10) || 1 ;
             const limit = parseInt(req.query.limit as string, 10) || 2;
             const skip = (page - 1) * limit;
-            const data = await this.userRepository.get({}, skip, limit);
+            const data = await this.userRepository.get({}, {'name': 1}, skip, limit);
             const count = data.length;
                 res.status(200).send({
                 message: 'trainees fethed successfully',

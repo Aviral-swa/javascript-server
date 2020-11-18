@@ -21,8 +21,8 @@ export default class UserRepository extends VersionableRepository<IUserModel, mo
         return super.delete(id);
     }
 
-    public get(query: any, skip: number, limit: number): DocumentQuery<IUserModel[], IUserModel> {
-        return super.get(query, skip, limit);
+    public get(query: any, sort: any, skip: number, limit: number): DocumentQuery<IUserModel[], IUserModel> {
+        return super.get(query, sort, skip, limit);
     }
 
     public async update(data: any): Promise<IUserModel> {
