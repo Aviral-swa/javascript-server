@@ -7,11 +7,13 @@ import authMiddleWare from '../../libs/routes/authMiddleWare';
 const traineeRouter = Router();
 
 traineeRouter.route('/')
-    .get(TraineeController.get)
-    .post(TraineeController.create)
-    .put(TraineeController.update);
+    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), TraineeController.get)
+    .post(authMiddleWare('getUsers', 'write'), validationHandler(config.create), TraineeController.create)
+    .put(authMiddleWare('getUsers', 'all'), validationHandler(config.update), TraineeController.update)
+    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), TraineeController.delete);
+
 
 traineeRouter.route('/:id')
-    .delete(TraineeController.delete);
+    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), TraineeController.delete);
 
 export default traineeRouter;

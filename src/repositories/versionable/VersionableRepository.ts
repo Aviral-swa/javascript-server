@@ -20,17 +20,13 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         });
         return await model.save();
     }
-    public count(query: any): Query<number> {
+    public async findOne(query: any): Promise<D> {
         const finalQuery = {deletedAt: undefined, ...query};
-        return this.model.count(finalQuery);
+        return await this.model.findOne(finalQuery);
     }
-    public findOne(query: any): DocumentQuery<D, D> {
+    public async get(query: any): Promise<D[]> {
         const finalQuery = {deletedAt: undefined, ...query};
-        return this.model.findOne(finalQuery);
-    }
-    public get(query: any, projection: any = {}, options: any = {}): DocumentQuery<D[], D> {
-        const finalQuery = {deletedAt: undefined, ...query};
-        return this.model.find(finalQuery, projection, options);
+        return await this.model.find(finalQuery);
     }
     public async delete(id: string): Promise<D> {
         const previous = await this.findOne({ originalId: id, deletedAt: undefined});
@@ -38,15 +34,15 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
             return await this.invalidate(id);
         }
     }
-    public invalidate(id: string): DocumentQuery<D, D> {
+    public async invalidate(id: string): Promise<D> {
         const query: any = {originalId: id, deletedAt: undefined};
         const data: any = {deletedAt: Date.now()};
-        return this.model.updateMany(query , data);
+        return await this.model.updateOne(query , data);
     }
-    public invalidateUpdate(id: string): DocumentQuery<D, D> {
+    public async invalidateUpdate(id: string): Promise<D> {
         const query: any = {originalId: id, deletedAt: undefined, updatedAt: undefined};
         const data: any = {deletedAt: Date.now(), updatedAt: Date.now()};
-        return this.model.updateMany(query , data);
+        return await this.model.updateOne(query , data);
     }
     public async update(data: any): Promise<D> {
         const previous = await this.findOne({ originalId: data.originalId, deletedAt: undefined});
@@ -56,11 +52,11 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         else {
             return undefined;
         }
-        const newData = Object.assign(JSON.parse(JSON.stringify(previous)), data);
+        const newData = Object.assign(JSON.parse(JSON.stringify(previous)), data.dataToUpdate);
         newData._id = VersionableRepository.generateObjectId();
         delete newData.deletedAt;
         newData.updatedAt = Date.now();
         const model = new this.model(newData);
-        return model.save();
+        return await model.save();
     }
 }

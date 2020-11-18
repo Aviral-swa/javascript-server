@@ -30,7 +30,7 @@ export default (module: string, permissionType: string) => async (
                 status: 403,
             });
         }
-        dbUser = await UserRepository.findOne({email: user.email, passsword: user.passsword});
+        dbUser = await UserRepository.findOne({email: user.email});
         req.user = dbUser;
         if (!hasPermissions(module, dbUser.role, permissionType)) {
             next({
