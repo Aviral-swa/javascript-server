@@ -25,9 +25,6 @@ export default class TraineeRepository extends VersionableRepository<ITraineeMod
         return super.update(data);
     }
 
-    public countAll() {
-        return traineeModel.countDocuments();
-    }
     public count(query: any) {
         return super.count(query);
     }
