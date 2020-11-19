@@ -13,7 +13,7 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
     }
     public async count(query: any): Promise<number> {
         const finalQuery = {deletedAt: undefined, ...query};
-        return await this.model.count(finalQuery);
+        return await this.model.countDocuments(finalQuery);
     }
     public async create(data: any): Promise<D> {
         const id = VersionableRepository.generateObjectId();

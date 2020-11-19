@@ -29,7 +29,11 @@ class TraineeController {
             const usersInPage = result.length;
                 res.status(200).send({
                 message: 'trainees fethed successfully',
-                data: totalCount, usersInPage, result,
+                data: {
+                    total: totalCount,
+                    showing: usersInPage,
+                    result
+                },
                 status: 'success'
             });
 
@@ -68,6 +72,10 @@ class TraineeController {
     public update = async (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
+            const newPassword = req.body.dataToUpdate.password;
+            if (newPassword) {
+                req.body.dataToUpdate.password = await bcrypt.hash(newPassword, 10);
+            }
             const result = await this.traineeRepository.update(req.body);
             if (!result) {
                 return next({
@@ -83,7 +91,6 @@ class TraineeController {
             });
         }
         catch (err) {
-
             return next({
                 error: 'bad request',
                 message: err,
