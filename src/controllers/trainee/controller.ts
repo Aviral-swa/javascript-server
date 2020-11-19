@@ -24,11 +24,12 @@ class TraineeController {
             console.log('inside get method');
             const { skip, limit } = res.locals;
             const sort  = req.query.sort;
-            const count = await this.traineeRepository.count(req.body);
+            const totalCount = await this.traineeRepository.count(req.body);
             const result = await this.traineeRepository.get(req.body, `${sort}`, skip, limit);
+            const usersInPage = result.length;
                 res.status(200).send({
                 message: 'trainees fethed successfully',
-                data: count, result,
+                data: totalCount, usersInPage, result,
                 status: 'success'
             });
 
@@ -68,6 +69,13 @@ class TraineeController {
         try {
             console.log('inside put method');
             const result = await this.traineeRepository.update(req.body);
+            if (!result) {
+                return next({
+                    error: 'invalid originalId',
+                    message: 'trainee not found ',
+                    status: 404
+                });
+            }
             res.status(200).send({
                 message: 'trainees updated successfully',
                 data: result,
@@ -87,7 +95,13 @@ class TraineeController {
     public delete = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
-            await this.traineeRepository.delete(req.params.id);
+            if (! await this.traineeRepository.delete(req.params.id)) {
+                return next({
+                    error: 'invalid originalId',
+                    message: 'trainee not found ',
+                    status: 404
+                });
+            }
             res.status(200).send({
                 message: 'trainee deleted successfully',
                 data: {},

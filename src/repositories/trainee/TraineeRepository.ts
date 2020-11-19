@@ -29,8 +29,7 @@ export default class TraineeRepository extends VersionableRepository<ITraineeMod
         return traineeModel.countDocuments();
     }
     public count(query: any) {
-        const finalQuery = {deletedAt: undefined, ...query};
-        return traineeModel.countDocuments(finalQuery);
+        return super.count(query);
     }
 
     public static findOne(query): DocumentQuery<ITraineeModel, ITraineeModel, {}> {
