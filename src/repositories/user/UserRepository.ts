@@ -17,16 +17,16 @@ export default class UserRepository extends VersionableRepository<IUserModel, mo
         return super.delete(id);
     }
 
-    public get(query: any): Promise<IUserModel[]> {
-        return super.get(query);
+    public get(query: any, sort: string, skip: number, limit: number): Promise<IUserModel[]> {
+        return super.get(query, sort, skip, limit);
     }
 
     public update(data: any): Promise<IUserModel> {
         return super.update(data);
     }
 
-    public count() {
-        return userModel.countDocuments();
+    public count(query: any) {
+        return super.count(query);
     }
 
     public static findOne(query): DocumentQuery<IUserModel, IUserModel, {}> {

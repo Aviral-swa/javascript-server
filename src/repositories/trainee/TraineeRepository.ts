@@ -17,16 +17,16 @@ export default class TraineeRepository extends VersionableRepository<ITraineeMod
         return super.delete(id);
     }
 
-    public get(query: any): Promise<ITraineeModel[]> {
-        return super.get(query);
+    public get(query: any, sort: string, skip: number, limit: number): Promise<ITraineeModel[]> {
+        return super.get(query, sort, skip, limit);
     }
 
     public update(data: any): Promise<ITraineeModel> {
         return super.update(data);
     }
 
-    public count() {
-        return traineeModel.countDocuments();
+    public count(query: any) {
+        return super.count(query);
     }
 
     public static findOne(query): DocumentQuery<ITraineeModel, ITraineeModel, {}> {

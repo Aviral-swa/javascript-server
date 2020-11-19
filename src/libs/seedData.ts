@@ -5,7 +5,7 @@ import { traineeSeedData, trainerSeedData } from './constants';
 
 const userRepository: UserRepository = new UserRepository();
 export async function userSeed() {
-    const count = await userRepository.count();
+    const count = await userRepository.count({});
     if (count === 0) {
         try {
             console.log('Seeding Data');
@@ -23,7 +23,7 @@ export async function userSeed() {
 }
 const traineeRepository: TraineeRepository = new TraineeRepository();
 export async function traineeSeed() {
-    const count = await traineeRepository.count();
+    const count = await traineeRepository.count({});
     if (count === 0) {
         try {
             console.log('Seeding Data');
