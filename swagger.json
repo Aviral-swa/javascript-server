@@ -1,0 +1,102 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Express App",
+        "description": "My User Project Application APIs",
+        "license": {
+            "name": "Successive",
+            "url": "https://successive.tech/"
+        }
+    },
+    "host": "localhost:9000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Trainees",
+            "description": "API for trainees in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/trainee/": {
+            "get": {
+                "tags": [
+                    "Trainees"
+                ],
+                "summary": "Get all trainees in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Trainee": {
+            "required": [
+                "name",
+                "password",
+                "email",
+                "role"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "trainee": {
+            "type": "array",
+            "$ref": "#/definitions/User"
+        }
+    },
+    "/addUser": {
+        "post": {
+            "tags": [
+                "Users"
+            ],
+            "description": "Create new user in system",
+            "parameters": [
+                {
+                    "name": "user",
+                    "in": "body",
+                    "description": "User that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/User"
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "New user is created",
+                    "schema": {
+                        "$ref": "#/definitions/User"
+                    }
+                }
+            }
+        }
+    }
+}

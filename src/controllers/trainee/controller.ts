@@ -23,10 +23,36 @@ class TraineeController {
         try {
             console.log('inside get method');
             const { skip, limit } = res.locals;
-            const sort  = req.query.sort;
-            const totalCount = await this.traineeRepository.count(req.body);
-            const result = await this.traineeRepository.get(req.body, `${sort}`, skip, limit);
+            const sort  = req.query.sort as string || 'originalId';
+            const sortOrder = Number(req.query.sortOrder) || -1;
+            let searchString = req.query.search as string;
+            let column = '';
+            if (searchString) {
+                const nameRegex = /[a-z]+$/i;
+                const emailRegex = /@[a-z]+[.][a-z]+/i;
+                if (nameRegex.test(searchString)) {
+                    column = 'name';
+                }
+                if (emailRegex.test(searchString)) {
+                    column = 'email';
+                }
+            }
+            else {
+                searchString = undefined;
+                column = undefined;
+            }
+            const totalCount = await this.traineeRepository.count({});
+            const result = await this.traineeRepository.get({[column]: searchString}, sort, sortOrder, skip, limit);
+            // const tt  = await Promise.all([totalCount, result]);
+            // console.log(tt);
             const usersInPage = result.length;
+            if (usersInPage === 0) {
+                return next({
+                    error: 'bad request',
+                    message: 'no records found',
+                    status: 400
+                });
+            }
                 res.status(200).send({
                 message: 'trainees fethed successfully',
                 data: {
