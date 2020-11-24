@@ -43,6 +43,20 @@ const config = {
             in: ['query'],
             errorMessage: 'Limit is invalid',
         },
+        sort: {
+            required: false,
+            string: true,
+            default: 'originalId',
+            in: ['query'],
+            errorMessage: 'sort is invalid',
+        },
+        sortOrder: {
+            required: false,
+            number: true,
+            default: -1,
+            in: ['query'],
+            errorMessage: 'sortOrder is invalid',
+        },
     },
     update: {
         originalId: {

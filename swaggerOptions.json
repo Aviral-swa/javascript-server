@@ -1,0 +1,447 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "An Express app that Uses mongoose/mongoDB as Database and creates users after authentication then performs CRUD opertsions using various technological operations like pagination, sorting, search etc.\n",
+    "version" : "1.0.0-oas3",
+    "title" : "Express App",
+    "contact" : {
+      "email" : "aviral.swarnkar@successive.tech"
+    }
+  },
+  "servers" : [ {
+    "description" : "Localhost",
+    "url" : "https://localhost:9000"
+  }
+  ],
+  "tags" : [ {
+    "name" : "trainee",
+    "description" : "Performs CRUD operations on trainees"
+  }, {
+    "name" : "user",
+    "description" : "Authorization and Authentication"
+  } ],
+  "paths" : {
+    "/api/trainee/" : {
+      "get" : {
+        "summary" : "Finds trainees",
+        "description" : "Multiple query values can be provided in query params like skip, limit, sort, search.",
+        "parameters" : [ {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "Pagination- the number of documents to skip.",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "default" : "available"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Pagination- the maximum number of documents per page.",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "default" : "available"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "the column name to sort for",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "default" : "available"
+          }
+        }, {
+          "name" : "sortOrder",
+          "in" : "query",
+          "description" : "1 for ascending and -1 for decending",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "default" : "available"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "description" : "Status values that need to be considered for filter",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "default" : "available"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Trainee"
+                  }
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Trainee"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid status value"
+          }
+        },
+        "security" : [ {
+          "Authorization" : [ ]
+        } ],
+        "tags" : [ "trainee" ]
+      },
+      "post" : {
+        "summary" : "Creates a trainee",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "description" : "Name of the trainee",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "role",
+          "in" : "query",
+          "description" : "Role of the trainee",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "email",
+          "in" : "query",
+          "description" : "email of the trainee",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "password",
+          "in" : "query",
+          "description" : "password",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        },
+        "security" : [ {
+          "Authorization" : [ ]
+        } ],
+        "tags" : [ "trainee" ]
+      },
+      "put" : {
+        "summary" : "Updates specific information of a trainee",
+        "parameters" : [ {
+          "name" : "originalId",
+          "in" : "query",
+          "description" : "originalId of the trainee that needs to be updated.",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "dataToUpdate",
+          "in" : "query",
+          "description" : "Information of the trainee that needs to be updated.",
+          "required" : true,
+          "schema" : {
+            "type" : "object"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "Authorization" : [ ]
+        } ],
+        "tags" : [ "trainee" ]
+      }
+    },
+    "/api/trainee/id" : {
+      "delete" : {
+        "summary" : "Deletes a trainee",
+        "parameters" : [ {
+          "name" : "originalId",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID"
+          },
+          "404" : {
+            "description" : "Trainee not found"
+          }
+        },
+        "security" : [ {
+          "Authorization" : [ ]
+        } ],
+        "tags" : [ "trainee" ]
+      }
+    },
+    "/api/user/login" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs user into the system",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "query",
+          "description" : "The email for login",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "password",
+          "in" : "query",
+          "description" : "The password for login in clear text",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Expires-After" : {
+                "description" : "date in UTC when token expires",
+                "schema" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid username / password supplied"
+          }
+        }
+      }
+    },
+    "/user/me" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Profile fetch of the current user",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation"
+          }
+        },
+        "security" : [ {
+          "Authorization" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Category" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "xml" : {
+          "name" : "Category"
+        }
+      },
+      "user" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "phone" : {
+            "type" : "string"
+          },
+          "userStatus" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "User Status"
+          }
+        },
+        "xml" : {
+          "name" : "User"
+        }
+      },
+      "Tag" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "xml" : {
+          "name" : "Tag"
+        }
+      },
+      "Trainee" : {
+        "type" : "object",
+        "required" : [ "name", "photoUrls" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "category" : {
+            "$ref" : "#/components/schemas/Category"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "doggie"
+          },
+          "photoUrls" : {
+            "type" : "array",
+            "xml" : {
+              "name" : "photoUrl",
+              "wrapped" : true
+            },
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "xml" : {
+              "name" : "tag",
+              "wrapped" : true
+            },
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "pet status in the store",
+            "enum" : [ "available", "pending", "sold" ]
+          }
+        },
+        "xml" : {
+          "name" : "Pet"
+        }
+      },
+      "ApiResponse" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "Pet" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Trainee"
+            }
+          },
+          "application/xml" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Trainee"
+            }
+          }
+        },
+        "description" : "Pet object that needs to be added to the store",
+        "required" : true
+      },
+      "UserArray" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/user"
+              }
+            }
+          }
+        },
+        "description" : "List of user object",
+        "required" : true
+      }
+    },
+    "securitySchemes" : {
+      "Authorization" : {
+        "type" : "apiKey",
+        "name" : "Authorization",
+        "in" : "header"
+      }
+    }
+  }
+}

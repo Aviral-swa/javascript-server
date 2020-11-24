@@ -22,9 +22,7 @@ class TraineeController {
     public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            const { skip, limit } = res.locals;
-            const sort  = req.query.sort as string || 'originalId';
-            const sortOrder = Number(req.query.sortOrder) || -1;
+            const { skip, limit, sort, sortOrder } = res.locals;
             let searchString = req.query.search as string;
             let column = '';
             if (searchString) {
@@ -41,11 +39,10 @@ class TraineeController {
                 searchString = undefined;
                 column = undefined;
             }
-            const totalCount = await this.traineeRepository.count({});
-            const result = await this.traineeRepository.get({[column]: searchString}, sort, sortOrder, skip, limit);
-            // const tt  = await Promise.all([totalCount, result]);
-            // console.log(tt);
-            const usersInPage = result.length;
+            const totalCount = this.traineeRepository.count({});
+            const result = this.traineeRepository.get({[column]: searchString}, sort, sortOrder, skip, limit);
+            const data  = await Promise.all([totalCount, result]);
+            const usersInPage = data[1].length;
             if (usersInPage === 0) {
                 return next({
                     error: 'bad request',
@@ -56,9 +53,9 @@ class TraineeController {
                 res.status(200).send({
                 message: 'trainees fethed successfully',
                 data: {
-                    total: totalCount,
+                    total: data[0],
                     showing: usersInPage,
-                    result
+                    result: data[1],
                 },
                 status: 'success'
             });

@@ -49,7 +49,10 @@ export default (config) => (
                 };
             return errors.push(err);
         }
-        res.locals[key] = Number(request);
+        if (keys.number) {
+            return res.locals[key] = Number(request);
+        }
+        res.locals[key] = request;
     });
     if (errors.length !== 0) {
         return res.status(400).send(errors);
