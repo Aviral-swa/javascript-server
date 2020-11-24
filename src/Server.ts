@@ -5,6 +5,7 @@ import routes from './router';
 import Database from './libs/database';
 import * as swaggerUi from 'swagger-ui-express';
 import * as swaggerdocs from 'swagger-jsdoc';
+// tslint:disable-next-line: no-var-requires
 const swaggerdoc = require('../swaggerOptions');
 
 
