@@ -22,6 +22,9 @@ export default (config) => (
         if ((!keys.required) && !(request)) {
             request = keys.default;
         }
+        if (!request) {
+            return;
+        }
         if (
             (((keys.number) && !(Number.isInteger(Number(request)))) ||
             ((keys.string) && !(typeof request === 'string')))
@@ -45,7 +48,7 @@ export default (config) => (
             const err = {
                 key: `${key}`,
                 location: `${keys.in}`,
-                errorMessage: `${request} must contain a space between first and last name`
+                errorMessage: `${request} invalid format`
                 };
             return errors.push(err);
         }

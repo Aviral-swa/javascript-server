@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import TraineeRepository from '../../repositories/trainee/TraineeRepository';
-import * as bcrypt from 'bcrypt';
+import { createHash } from '../../libs/helper';
 class TraineeController {
 
     static instance: TraineeController;
@@ -74,9 +74,10 @@ class TraineeController {
     public create = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
-            const hashPass = await bcrypt.hash(req.body.password, 10);
-            req.body.password = hashPass;
-            const result = await this.traineeRepository.create(req.body);
+            const { password, ...rest }  = req.body;
+            const hashPass = await createHash(password);
+            const newUser = {...rest, password: hashPass};
+            const result = await this.traineeRepository.create(newUser);
             res.status(200).send({
                 message: 'trainee created successfully',
                 data: result,
@@ -97,7 +98,7 @@ class TraineeController {
             console.log('inside put method');
             const newPassword = req.body.dataToUpdate.password;
             if (newPassword) {
-                req.body.dataToUpdate.password = await bcrypt.hash(newPassword, 10);
+                req.body.dataToUpdate.password = await createHash(newPassword);
             }
             const result = await this.traineeRepository.update(req.body);
             if (!result) {
