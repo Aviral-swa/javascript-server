@@ -23,26 +23,20 @@ class TraineeController {
         try {
             console.log('inside get method');
             const { skip, limit, sort, sortOrder } = res.locals;
-            let searchString = req.query.search as string;
+            const searchString = req.query.search as string;
             let column = '';
-            if (searchString) {
-                const nameRegex = /[a-z]+$/i;
-                const emailRegex = /@[a-z]+[.][a-z]+/i;
-                if (nameRegex.test(searchString)) {
-                    column = 'name';
-                }
-                if (emailRegex.test(searchString)) {
-                    column = 'email';
-                }
+            const nameRegex = /[a-z]+$/i;
+            const emailRegex = /@[a-z]+[.][a-z]+/i;
+            if (searchString && (nameRegex.test(searchString))) {
+                column = 'name';
             }
-            else {
-                searchString = undefined;
-                column = undefined;
+            if (searchString && (emailRegex.test(searchString))) {
+                column = 'email';
             }
-            const totalCount = this.traineeRepository.count({});
+            const countTotal = this.traineeRepository.count({});
             const result = this.traineeRepository.get({[column]: searchString}, sort, sortOrder, skip, limit);
-            const data  = await Promise.all([totalCount, result]);
-            const usersInPage = data[1].length;
+            const [totalCount, trainees ] = await Promise.all([countTotal, result]);
+            const usersInPage = trainees.length;
             if (usersInPage === 0) {
                 return next({
                     error: 'bad request',
@@ -53,9 +47,9 @@ class TraineeController {
                 res.status(200).send({
                 message: 'trainees fethed successfully',
                 data: {
-                    total: data[0],
+                    total: totalCount,
                     showing: usersInPage,
-                    result: data[1],
+                    traineesList: trainees,
                 },
                 status: 'success'
             });

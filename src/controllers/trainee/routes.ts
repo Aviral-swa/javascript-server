@@ -53,11 +53,11 @@ traineeRouter.route('/')
      *       '200':
      *         description: successful operation
      *         schema:
-     *           $ref: '#/components/schemas/ApiSuccess'
+     *           $ref: '#/definitions/getApiExample'
      *       '400':
      *         description: Invalid status value
      *         schema:
-     *           $ref: '#/components/schemas/ApiError'
+     *           $ref: '#/definitions/ApiError'
      *     security:
      *       - ApiKeyAuth: []
      *     tags:
@@ -73,7 +73,7 @@ traineeRouter.route('/')
      *       - name: data
      *         in: body
      *         example:
-     *           email: example@cc.tech
+     *           email: example@successive.tech
      *           password: zxcv
      *           name: test
      *           role: trainer
@@ -86,11 +86,11 @@ traineeRouter.route('/')
      *       '200':
      *         description: successful operation
      *         schema:
-     *           $ref: '#/components/schemas/ApiSuccess'
+     *           $ref: '#/definitions/ApiSuccess'
      *       '400':
      *         description: Invalid status value
      *         schema:
-     *           $ref: '#/components/schemas/ApiError'
+     *           $ref: '#/definitions/ApiError'
      *     security:
      *       - ApiKeyAuth: []
      *     tags:
@@ -106,7 +106,7 @@ traineeRouter.route('/')
      *       - name: data
      *         in: body
      *         example:
-     *           originalId: 87yr77w787b
+     *           originalId: 5fbf9f1827f5c2b1e17b75e2
      *           dataToUpdate: {name: hh}
      *         content:
      *           application/json:
@@ -117,11 +117,11 @@ traineeRouter.route('/')
      *        '200':
      *          description: successful operation
      *          schema:
-     *            $ref: '#/components/schemas/ApiSuccess'
+     *            $ref: '#/definitions/ApiSuccess'
      *        '400':
      *          description: Invalid status value
      *          schema:
-     *            $ref: '#/components/schemas/ApiError'
+     *            $ref: '#/definitions/ApiError'
      *      security:
      *        - ApiKeyAuth: []
      *      tags:
@@ -133,11 +133,11 @@ traineeRouter.route('/')
 traineeRouter.route('/:id')
     /**
      * @swagger
-     * '/trainee/:id':
+     * '/trainee/{id}':
      *   delete:
      *     summary: Deletes a trainee
      *     parameters:
-     *       - name: originalId
+     *       - name: id
      *         in: path
      *         required: true
      *         schema:
@@ -146,11 +146,11 @@ traineeRouter.route('/:id')
      *       '200':
      *         description: Success
      *         schema:
-     *           $ref: '#/components/schemas/delApiSuccess'
+     *           $ref: '#/definitions/delApiSuccess'
      *       '404':
      *         description: Trainee not found
      *         schema:
-     *           $ref: '#/components/schemas/ApiError'
+     *           $ref: '#/definitions/ApiError'
      *     security:
      *       - ApiKeyAuth: []
      *     tags:

@@ -17,7 +17,11 @@ userRouter.route('/me')
      *       '200':
      *         description: successful operation
      *         schema:
-     *           $ref: '#/components/schemas/ApiSuccess'
+     *           $ref: '#/definitions/ApiSuccess'
+     *       '400':
+     *         description: Invalid username / password supplied
+     *         schema:
+     *           $ref: '#/definitions/ApiError'
      *     security:
      *       - ApiKeyAuth: []
      */
@@ -34,7 +38,7 @@ userRouter.route('/login')
      *       - name: data
      *         in: body
      *         example:
-     *           email: example@nx.tech
+     *           email: example@successive.tech
      *           password: gtf66fh
      *         content:
      *           application/json:
@@ -45,11 +49,11 @@ userRouter.route('/login')
      *       '200':
      *         description: successful operation
      *         schema:
-     *           $ref: '#/components/schemas/Login'
+     *           $ref: '#/definitions/Login'
      *       '400':
      *         description: Invalid username / password supplied
      *         schema:
-     *           $ref: '#/components/schemas/ApiError'
+     *           $ref: '#/definitions/ApiError'
      */
     .post(validationHandler(config.post), UserController.login);
 
