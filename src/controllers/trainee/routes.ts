@@ -59,7 +59,7 @@ traineeRouter.route('/')
      *         schema:
      *           $ref: '#/components/schemas/ApiError'
      *     security:
-     *       - BearerAuth: []
+     *       - ApiKeyAuth: []
      *     tags:
      *       - trainee
      */
@@ -92,7 +92,7 @@ traineeRouter.route('/')
      *         schema:
      *           $ref: '#/components/schemas/ApiError'
      *     security:
-     *       - BearerAuth: []
+     *       - ApiKeyAuth: []
      *     tags:
      *       - trainee
      */
@@ -123,7 +123,7 @@ traineeRouter.route('/')
      *          schema:
      *            $ref: '#/components/schemas/ApiError'
      *      security:
-     *        - BearerAuth: []
+     *        - ApiKeyAuth: []
      *      tags:
      *        - trainee
      */
@@ -152,7 +152,7 @@ traineeRouter.route('/:id')
      *         schema:
      *           $ref: '#/components/schemas/ApiError'
      *     security:
-     *       - BearerAuth: []
+     *       - ApiKeyAuth: []
      *     tags:
      *       - trainee
      */

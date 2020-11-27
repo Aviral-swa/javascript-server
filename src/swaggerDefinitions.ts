@@ -3,7 +3,7 @@ import * as swaggerdocs from 'swagger-jsdoc';
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            openapi: '3.0.0',
+            swagger: '2.0',
             description: 'An Express app that Uses mongoose/mongoDB as Database and creates users after authentication then performs CRUD opertsions using various technological operations like pagination, sorting, search etc.',
             version: '1.0.0',
             title: 'Express App',

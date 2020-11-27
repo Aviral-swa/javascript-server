@@ -16,14 +16,10 @@ userRouter.route('/me')
      *     responses:
      *       '200':
      *         description: successful operation
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: array
-     *               items:
-     *                 $ref: '#/components/schemas/ApiSuccess'
+     *         schema:
+     *           $ref: '#/components/schemas/ApiSuccess'
      *     security:
-     *       - BearerAuth: []
+     *       - ApiKeyAuth: []
      */
     .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.me);
 userRouter.route('/login')
@@ -48,21 +44,12 @@ userRouter.route('/login')
      *     responses:
      *       '200':
      *         description: successful operation
-     *         headers:
-     *           X-Expires-After:
-     *             description: date in UTC when token expires
-     *             schema:
-     *               type: string
-     *               format: date-time
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: string
-     *           application/xml:
-     *             schema:
-     *               type: string
+     *         schema:
+     *           $ref: '#/components/schemas/Login'
      *       '400':
      *         description: Invalid username / password supplied
+     *         schema:
+     *           $ref: '#/components/schemas/ApiError'
      */
     .post(validationHandler(config.post), UserController.login);
 

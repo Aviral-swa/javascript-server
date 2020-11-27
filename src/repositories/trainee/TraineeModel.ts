@@ -70,11 +70,28 @@ export const traineeSchema = new TraineeSchema({
  *         status:
  *           type: string
  *           example: success
- *   securitySchemes:
- *     BearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
+ *     Login:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: Operation Successfull
+ *         data:
+ *           $ref: '#/components/schemas/Token'
+ *         status:
+ *           type: string
+ *           example: success
+ *     Token:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJTdWNjZXNzaXZlIFRlY2hub2xvZ2llcyIsImF1ZCI6Ind3dy5zdWNjZXNzaXZlLmluIiwic3ViIjoiTGVhcm4gYW5kIEltcGxlbWVudCIsImVtYWlsIjoiaGVhZC50cmFpbmVyQHN1Y2Nlc3NpdmUudGVjaCIsImlhdCI6MTYwNjQwMzI2OCwiZXhwIjoxNjA2NDA0MTY4fQ.0qVPgXSpMpJLK5TqwFTjzb5ADN589PmPOrk30Uuoado"
+ * securityDefinitions:
+ *   ApiKeyAuth:
+ *     type: apiKey
+ *     in: header
+ *     name: Authorization
  */
 
 export const traineeModel: mongoose.Model<ITraineeModel> = mongoose.model<ITraineeModel>(
