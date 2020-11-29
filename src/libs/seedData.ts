@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import UserRepository from '../repositories/user/UserRepository';
 import TraineeRepository from '../repositories/trainee/TraineeRepository';
 import { traineeSeedData, trainerSeedData } from './constants';

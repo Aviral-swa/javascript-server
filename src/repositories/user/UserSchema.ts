@@ -1,4 +1,3 @@
-import * as mongoose from 'mongoose';
 import VersionableSchema from '../versionable/VersionableSchema';
 
 
