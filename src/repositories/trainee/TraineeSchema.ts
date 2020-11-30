@@ -1,6 +1,5 @@
 import VersionableSchema from '../versionable/VersionableSchema';
 
-
 export default class TraineeSchema extends VersionableSchema {
 
     constructor(collections: any) {

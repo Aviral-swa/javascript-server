@@ -18,8 +18,8 @@ export default class TraineeRepository extends VersionableRepository<ITraineeMod
         return super.delete(id);
     }
 
-    public get(query: IQuery, sort: string, sortOrder: number, skip: number, limit: number): Promise<ITraineeModel[]> {
-        return super.get(query, sort, sortOrder, skip, limit);
+    public get(query: IQuery, options: any): Promise<ITraineeModel[]> {
+        return super.get(query, options);
     }
 
     public update(data: IUpdate): Promise<ITraineeModel> {

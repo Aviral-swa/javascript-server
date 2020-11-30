@@ -22,19 +22,20 @@ class TraineeController {
     public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            const { skip, limit, sort, sortOrder } = res.locals;
-            const searchString = req.query.search as string;
-            let column = '';
-            const nameRegex = /[a-z]+$/i;
+            const { skip, limit, sort, sortOrder, searchString } = res.locals;
+            let column = 'name';
             const emailRegex = /@[a-z]+[.][a-z]+/i;
-            if (searchString && (nameRegex.test(searchString))) {
-                column = 'name';
-            }
             if (searchString && (emailRegex.test(searchString))) {
                 column = 'email';
             }
+            const options = {
+                skip,
+                limit,
+                sort: { [sort]: sortOrder }
+            };
+            const regexSearch = new RegExp(searchString, 'gi');
+            const result = this.traineeRepository.get({[column]: regexSearch} || {}, options);
             const countTotal = this.traineeRepository.count({});
-            const result = this.traineeRepository.get({[column]: searchString}, sort, sortOrder, skip, limit);
             const [totalCount, trainees ] = await Promise.all([countTotal, result]);
             const usersInPage = trainees.length;
             if (usersInPage === 0) {
@@ -71,10 +72,10 @@ class TraineeController {
             const { password, ...rest }  = req.body;
             const hashPass = await createHash(password);
             const newUser = {...rest, password: hashPass};
-            const result = await this.traineeRepository.create(newUser);
+            const createdUser = await this.traineeRepository.create(newUser);
             res.status(200).send({
                 message: 'trainee created successfully',
-                data: result,
+                data: createdUser,
                 status: 'success'
             });
         }
@@ -90,12 +91,14 @@ class TraineeController {
     public update = async (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
-            const newPassword = req.body.dataToUpdate.password;
-            if (newPassword) {
-                req.body.dataToUpdate.password = await createHash(newPassword);
+            let newPassword;
+            const { dataToUpdate: {password, ...rest}, originalId } = req.body;
+            if (password) {
+                newPassword = await createHash(password);
             }
-            const result = await this.traineeRepository.update(req.body);
-            if (!result) {
+            const newUser = { originalId, dataToUpdate: { password: newPassword, ...rest }};
+            const updatedUser = await this.traineeRepository.update(newUser);
+            if (!updatedUser) {
                 return next({
                     error: 'invalid originalId',
                     message: 'trainee not found ',
@@ -104,7 +107,7 @@ class TraineeController {
             }
             res.status(200).send({
                 message: 'trainees updated successfully',
-                data: result,
+                data: updatedUser,
                 status: 'success'
             });
         }

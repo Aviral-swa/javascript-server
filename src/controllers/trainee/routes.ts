@@ -42,7 +42,7 @@ traineeRouter.route('/')
      *         schema:
      *           type: number
      *           default: available
-     *       - name: search
+     *       - name: searchString
      *         in: query
      *         description: Status values that need to be considered for filter
      *         required: false

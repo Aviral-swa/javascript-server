@@ -64,6 +64,11 @@ const config = {
             in: ['query'],
             errorMessage: 'sortOrder is invalid',
         },
+        searchString: {
+            required: false,
+            string: true,
+            in: ['query'],
+        }
     },
     update: {
         originalId: {
