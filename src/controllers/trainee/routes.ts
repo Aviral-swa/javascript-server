@@ -30,14 +30,14 @@ traineeRouter.route('/')
      *           default: available
      *       - name: sort
      *         in: query
-     *         description: the column name to sort for
+     *         description: The column name to sort for
      *         required: false
      *         schema:
      *           type: number
      *           default: available
      *       - name: sortOrder
      *         in: query
-     *         description: 1 for ascending and -1 for decending
+     *         description: Ascending or Descending
      *         required: false
      *         schema:
      *           type: number

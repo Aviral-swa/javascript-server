@@ -59,8 +59,8 @@ const config = {
         },
         sortOrder: {
             required: false,
-            number: true,
-            default: -1,
+            string: true,
+            default: 'descending',
             in: ['query'],
             errorMessage: 'sortOrder is invalid',
         },

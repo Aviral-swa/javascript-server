@@ -27,7 +27,7 @@ export default (config) => (
         }
         if (
             (((keys.number) && !(Number.isInteger(Number(request)))) ||
-            ((keys.string) && !(typeof request === 'string')))
+            ((keys.string) && (!(typeof request === 'string') || Number(request))))
         ) {
             const err = {
                 key: `${key}`,
