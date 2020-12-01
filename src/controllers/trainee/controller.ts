@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import TraineeRepository from '../../repositories/trainee/TraineeRepository';
-import * as bcrypt from 'bcrypt';
+import { createHash } from '../../libs/helper';
 class TraineeController {
 
     static instance: TraineeController;
@@ -22,17 +22,35 @@ class TraineeController {
     public get = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside get method');
-            const { skip, limit } = res.locals;
-            const sort  = req.query.sort;
-            const totalCount = await this.traineeRepository.count(req.body);
-            const result = await this.traineeRepository.get(req.body, `${sort}`, skip, limit);
-            const usersInPage = result.length;
+            const { skip, limit, sort, sortOrder, searchString } = res.locals;
+            let column = 'name';
+            const emailRegex = /@[a-z]+[.][a-z]+/i;
+            if (searchString && (emailRegex.test(searchString))) {
+                column = 'email';
+            }
+            const options = {
+                skip,
+                limit,
+                sort: { [sort]: sortOrder }
+            };
+            const regexSearch = new RegExp(searchString, 'gi');
+            const result = this.traineeRepository.get({[column]: regexSearch} || {}, options);
+            const countTotal = this.traineeRepository.count({});
+            const [totalCount, trainees ] = await Promise.all([countTotal, result]);
+            const usersInPage = trainees.length;
+            if (usersInPage === 0) {
+                return next({
+                    error: 'bad request',
+                    message: 'no records found',
+                    status: 400
+                });
+            }
                 res.status(200).send({
                 message: 'trainees fethed successfully',
                 data: {
                     total: totalCount,
                     showing: usersInPage,
-                    result
+                    traineesList: trainees,
                 },
                 status: 'success'
             });
@@ -51,12 +69,13 @@ class TraineeController {
     public create = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
-            const hashPass = await bcrypt.hash(req.body.password, 10);
-            req.body.password = hashPass;
-            const result = await this.traineeRepository.create(req.body);
+            const { password, ...rest }  = req.body;
+            const hashPass = await createHash(password);
+            const newUser = {...rest, password: hashPass};
+            const createdUser = await this.traineeRepository.create(newUser);
             res.status(200).send({
                 message: 'trainee created successfully',
-                data: result,
+                data: createdUser,
                 status: 'success'
             });
         }
@@ -72,12 +91,14 @@ class TraineeController {
     public update = async (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
-            const newPassword = req.body.dataToUpdate.password;
-            if (newPassword) {
-                req.body.dataToUpdate.password = await bcrypt.hash(newPassword, 10);
+            let newPassword;
+            const { dataToUpdate: {password, ...rest}, originalId } = req.body;
+            if (password) {
+                newPassword = await createHash(password);
             }
-            const result = await this.traineeRepository.update(req.body);
-            if (!result) {
+            const newUser = { originalId, dataToUpdate: { password: newPassword, ...rest }};
+            const updatedUser = await this.traineeRepository.update(newUser);
+            if (!updatedUser) {
                 return next({
                     error: 'invalid originalId',
                     message: 'trainee not found ',
@@ -86,7 +107,7 @@ class TraineeController {
             }
             res.status(200).send({
                 message: 'trainees updated successfully',
-                data: result,
+                data: updatedUser,
                 status: 'success'
             });
         }

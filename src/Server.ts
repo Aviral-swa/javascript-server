@@ -3,6 +3,9 @@ import * as bodyParser from 'body-parser';
 import { errorHandler, notFoundRoute } from './libs/routes';
 import routes from './router';
 import Database from './libs/database';
+import * as swaggerUi from 'swagger-ui-express';
+import swaggerDocuments from './swaggerDefinitions';
+
 class Server {
     private app: any;
     constructor(private configuration: IConfig) {
@@ -21,6 +24,8 @@ class Server {
         app.use('/health-check', (req, res) => {
             res.send('I am OK');
         });
+
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocuments));
 
         app.use('/api', routes);
 

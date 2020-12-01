@@ -4,13 +4,7 @@ const config = {
             required: true,
             string: true,
             in: ['body'],
-            custom(value) {
-                console.log('Value', value);
-                throw {
-                    error: 'Error Occured',
-                    message: 'Message',
-                };
-            },
+            errorMessage: 'password is required'
         },
         email: {
             required: true,
@@ -18,6 +12,19 @@ const config = {
             regex: /\w+@successive.tech$/i,
             in: ['body'],
             errorMessage: 'email is required',
+        },
+        name: {
+            required: false,
+            string: true,
+            in: ['body'],
+            regex: /[a-z]+/i,
+            errorMessage: 'must be string'
+        },
+        role: {
+            required: false,
+            string: true,
+            in: ['body'],
+            errorMessage: 'must be string'
         },
     },
 
@@ -43,6 +50,25 @@ const config = {
             in: ['query'],
             errorMessage: 'Limit is invalid',
         },
+        sort: {
+            required: false,
+            string: true,
+            default: 'originalId',
+            in: ['query'],
+            errorMessage: 'sort is invalid',
+        },
+        sortOrder: {
+            required: false,
+            string: true,
+            default: 'descending',
+            in: ['query'],
+            errorMessage: 'sortOrder is invalid',
+        },
+        searchString: {
+            required: false,
+            string: true,
+            in: ['query'],
+        }
     },
     update: {
         originalId: {

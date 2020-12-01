@@ -1,5 +1,5 @@
 import validateEmail from './helper';
-
+import { IUsers } from '../interfaces';
 
 export default function validateUsers(user: IUsers[]): void {
     console.log('\n //running validation.js ... \n');

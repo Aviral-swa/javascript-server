@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { DocumentQuery, Query } from 'mongoose';
 
 export default class VersionableRepository <D extends mongoose.Document, M extends mongoose.Model<D>> {
     public static generateObjectId() {
@@ -28,9 +27,9 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         const finalQuery = {deletedAt: undefined, ...query};
         return await this.model.findOne(finalQuery);
     }
-    public async get(query: any, sort: string, skip: number, limit: number): Promise<D[]> {
+    public async get(query: any, options: any): Promise<D[]> {
         const finalQuery = {deletedAt: undefined, ...query};
-        return await this.model.find(finalQuery).sort(sort).skip(skip).limit(limit);
+        return await this.model.find(finalQuery, {}, options);
     }
     public async delete(id: string): Promise<D> {
         const previous = await this.findOne({ originalId: id, deletedAt: undefined});

@@ -22,9 +22,12 @@ export default (config) => (
         if ((!keys.required) && !(request)) {
             request = keys.default;
         }
+        if (!request) {
+            return;
+        }
         if (
             (((keys.number) && !(Number.isInteger(Number(request)))) ||
-            ((keys.string) && !(typeof request === 'string')))
+            ((keys.string) && (!(typeof request === 'string') || Number(request))))
         ) {
             const err = {
                 key: `${key}`,
@@ -45,11 +48,14 @@ export default (config) => (
             const err = {
                 key: `${key}`,
                 location: `${keys.in}`,
-                errorMessage: `${request} must contain a space between first and last name`
+                errorMessage: `${request} invalid format`
                 };
             return errors.push(err);
         }
-        res.locals[key] = Number(request);
+        if (keys.number) {
+            return res.locals[key] = Number(request);
+        }
+        res.locals[key] = request;
     });
     if (errors.length !== 0) {
         return res.status(400).send(errors);

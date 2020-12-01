@@ -1,7 +1,7 @@
-import * as bcrypt from 'bcrypt';
 import UserRepository from '../repositories/user/UserRepository';
 import TraineeRepository from '../repositories/trainee/TraineeRepository';
 import { traineeSeedData, trainerSeedData } from './constants';
+import { createHash } from './helper';
 
 const userRepository: UserRepository = new UserRepository();
 export async function userSeed() {
@@ -9,9 +9,9 @@ export async function userSeed() {
     if (count === 0) {
         try {
             console.log('Seeding Data');
-            const traineeHash = await bcrypt.hash(traineeSeedData.password, 10);
+            const traineeHash = await createHash(traineeSeedData.password);
             traineeSeedData.password = traineeHash;
-            const trainerHash = await bcrypt.hash(trainerSeedData.password, 10);
+            const trainerHash = await createHash(trainerSeedData.password);
             trainerSeedData.password = trainerHash;
             userRepository.create(traineeSeedData);
             userRepository.create(trainerSeedData);
@@ -27,9 +27,9 @@ export async function traineeSeed() {
     if (count === 0) {
         try {
             console.log('Seeding Data');
-            const traineeHash = await bcrypt.hash(traineeSeedData.password, 10);
+            const traineeHash = await createHash(traineeSeedData.password);
             traineeSeedData.password = traineeHash;
-            const trainerHash = await bcrypt.hash(trainerSeedData.password, 10);
+            const trainerHash = await createHash(trainerSeedData.password);
             trainerSeedData.password = trainerHash;
             traineeRepository.create(traineeSeedData);
             traineeRepository.create(trainerSeedData);

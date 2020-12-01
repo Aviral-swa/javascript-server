@@ -1,6 +1,4 @@
-import * as mongoose from 'mongoose';
 import VersionableSchema from '../versionable/VersionableSchema';
-
 
 export default class TraineeSchema extends VersionableSchema {
 

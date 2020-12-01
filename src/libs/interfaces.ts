@@ -36,3 +36,24 @@ export interface ICreate {
     role: string;
     password: string;
 }
+
+export interface IUpdate {
+    originalId: string;
+    dataToUpdate: updateData;
+}
+type updateData = {
+    name?: string;
+    email?: string;
+    role?: string;
+    password?: string;
+};
+
+export interface IQuery {
+    name?: string;
+    email?: string;
+    role?: string;
+    password?: string;
+    deletedAt?: Date;
+    updatedAt?: Date;
+    originalId?: string;
+}
