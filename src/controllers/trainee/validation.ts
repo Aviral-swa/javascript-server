@@ -14,17 +14,15 @@ const config = {
             errorMessage: 'email is required',
         },
         name: {
-            required: false,
+            required: true,
             string: true,
             in: ['body'],
             regex: /[a-z]+/i,
-            errorMessage: 'must be string'
         },
         role: {
-            required: false,
+            required: true,
             string: true,
             in: ['body'],
-            errorMessage: 'must be string'
         },
     },
 

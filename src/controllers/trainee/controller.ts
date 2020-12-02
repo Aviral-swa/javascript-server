@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import TraineeRepository from '../../repositories/trainee/TraineeRepository';
 import { createHash } from '../../libs/helper';
+import { ITrainee } from '../entities/interfaces';
 class TraineeController {
 
     static instance: TraineeController;
@@ -34,9 +35,9 @@ class TraineeController {
                 sort: { [sort]: sortOrder }
             };
             const regexSearch = new RegExp(searchString, 'gi');
-            const result = this.traineeRepository.get({[column]: regexSearch} || {}, options);
+            const trainee: Promise<ITrainee[]> = this.traineeRepository.get({[column]: regexSearch} || {}, options);
             const countTotal = this.traineeRepository.count({});
-            const [totalCount, trainees ] = await Promise.all([countTotal, result]);
+            const [totalCount, trainees ] = await Promise.all([countTotal, trainee]);
             const usersInPage = trainees.length;
             if (usersInPage === 0) {
                 return next({
@@ -72,7 +73,7 @@ class TraineeController {
             const { password, ...rest }  = req.body;
             const hashPass = await createHash(password);
             const newUser = {...rest, password: hashPass};
-            const createdUser = await this.traineeRepository.create(newUser);
+            const createdUser: ITrainee = await this.traineeRepository.create(newUser);
             res.status(200).send({
                 message: 'trainee created successfully',
                 data: createdUser,
@@ -97,7 +98,7 @@ class TraineeController {
                 newPassword = await createHash(password);
             }
             const newUser = { originalId, dataToUpdate: { password: newPassword, ...rest }};
-            const updatedUser = await this.traineeRepository.update(newUser);
+            const updatedUser: ITrainee = await this.traineeRepository.update(newUser);
             if (!updatedUser) {
                 return next({
                     error: 'invalid originalId',
