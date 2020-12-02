@@ -5,7 +5,7 @@ import { configuration } from '../../config';
 import UserRepository from '../../repositories/user/UserRepository';
 import { IRequest } from '../../libs/interfaces';
 import { payload } from './constants';
-import { IUser } from '../entities/interfaces';
+import { IUser } from '../../entities';
 
 class UserController {
 

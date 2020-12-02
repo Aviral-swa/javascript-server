@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import TraineeRepository from '../../repositories/trainee/TraineeRepository';
 import { createHash } from '../../libs/helper';
-import { ITrainee } from '../entities/interfaces';
+import { ITrainee } from '../../entities';
 class TraineeController {
 
     static instance: TraineeController;
@@ -36,9 +36,9 @@ class TraineeController {
             };
             const regexSearch = new RegExp(searchString, 'gi');
             const trainee: Promise<ITrainee[]> = this.traineeRepository.get({[column]: regexSearch} || {}, options);
-            const countTotal = this.traineeRepository.count({});
+            const countTotal: Promise<number> = this.traineeRepository.count({});
             const [totalCount, trainees ] = await Promise.all([countTotal, trainee]);
-            const usersInPage = trainees.length;
+            const usersInPage: number = trainees.length;
             if (usersInPage === 0) {
                 return next({
                     error: 'bad request',
@@ -92,7 +92,7 @@ class TraineeController {
     public update = async (req: Request, res: Response, next: NextFunction) =>  {
         try {
             console.log('inside put method');
-            let newPassword;
+            let newPassword: string;
             const { dataToUpdate: {password, ...rest}, originalId } = req.body;
             if (password) {
                 newPassword = await createHash(password);

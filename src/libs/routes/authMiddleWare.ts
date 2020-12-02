@@ -4,6 +4,7 @@ import { default as hasPermissions } from '../hasPermissions';
 import configuration from '../../config/configuration';
 import UserRepository from '../../repositories/user/UserRepository';
 import { IRequest } from '../interfaces';
+import { IUser } from '../../entities';
 
 export default (module: string, permissionType: string) => async (
     req: IRequest,
@@ -13,7 +14,7 @@ export default (module: string, permissionType: string) => async (
     const secret_key = configuration.secret_key;
     const auth = 'authorization';
     const token = req.headers[auth];
-    let dbUser;
+    let dbUser: IUser;
     if (!token) {
         next({
             message: 'Token not found',
