@@ -17,7 +17,7 @@ class Server {
         const corsOptions = {
             origin: '*',
             optionsSuccessStatus: 200
-          }
+          };
         this.app.use(cors(corsOptions));
     }
 

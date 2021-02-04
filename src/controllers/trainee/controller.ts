@@ -76,7 +76,7 @@ class TraineeController {
             console.log('inside post method');
             const { password, ...rest }  = req.body;
             const hashPass = await createHash(password);
-            const { role } = res.locals
+            const { role } = res.locals;
             const newUser = {...rest, password: hashPass, role};
             const createdUser: ITrainee = await this.traineeRepository.create(newUser);
             res.status(200).send({
