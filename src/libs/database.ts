@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { userSeed, traineeSeed } from './seedData';
+import { userSeed, traineeSeed, employeeSeed } from './seedData';
 
 class Database {
 
@@ -15,6 +15,7 @@ class Database {
                 }
                 userSeed();
                 traineeSeed();
+                employeeSeed();
                 resolve();
                 console.log('Connected to database');
             });
