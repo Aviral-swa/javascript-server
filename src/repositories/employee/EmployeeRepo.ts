@@ -17,7 +17,9 @@ export default class EmployeeRepository {
             });
             return await model.save();
         }
-        const parent = await employeeModel.findOne({ name: data.parent });
+        const parent = await employeeModel.findOne({name:
+        { $regex: new RegExp('^' + data.parent + '$', 'i') } });
+        if (! parent) return undefined;
         const parentAncestors = parent.ancestors;
         parentAncestors.push(data.parent);
         const model = new employeeModel({
@@ -28,7 +30,7 @@ export default class EmployeeRepository {
         return await model.save();
     }
 
-    public async get(query: any): Promise<IEmployeeModel> {
+    public async get(query: any): Promise<IEmployeeModel[]> {
         return await employeeModel.find(query);
     }
 
