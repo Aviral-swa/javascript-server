@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { employeeModel } from './EmployeeModel';
 import IEmployeeModel from './IEmployeeModel';
+import IEmployee from '../../entities/IEmployee';
 
 export default class EmployeeRepository {
 
@@ -8,7 +9,7 @@ export default class EmployeeRepository {
         return String(mongoose.Types.ObjectId());
     }
 
-    public async create(data: any): Promise<IEmployeeModel> {
+    public async create(data: IEmployee): Promise<IEmployeeModel> {
         const id = EmployeeRepository.getUserObjectId();
         if (! data.parent) {
             const model = new employeeModel({
@@ -17,9 +18,12 @@ export default class EmployeeRepository {
             });
             return await model.save();
         }
-        const parent = await employeeModel.findOne({name:
-        { $regex: new RegExp('^' + data.parent + '$', 'i') } });
-        if (! parent) return undefined;
+        const parent = await employeeModel.findOne({
+            name: {
+                $regex: new RegExp('^' + data.parent + '$', 'i')
+            }
+        });
+        if (!parent) return undefined;
         const parentAncestors = parent.ancestors;
         parentAncestors.push(data.parent);
         const model = new employeeModel({

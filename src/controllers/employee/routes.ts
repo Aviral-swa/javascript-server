@@ -4,11 +4,13 @@ import EmployeeController from './controller';
 const employeeRouter = Router();
 
 employeeRouter.route('/')
+
     /**
      * @swagger
      * /employee/:
      *   post:
      *     summary: Creates a employee
+     *     description: Creates an employee (Node) by accepting 3 parameters - name, role, parent.
      *     parameters:
      *       - name: data
      *         in: body
@@ -33,7 +35,9 @@ employeeRouter.route('/')
      *     tags:
      *       - employee
      */
+
     .post(EmployeeController.create)
+
     /**
      * @swagger
      * /employee/:
@@ -52,6 +56,7 @@ employeeRouter.route('/')
      *     tags:
      *       - employee
      */
+
     .get(EmployeeController.get);
 
 export default employeeRouter;

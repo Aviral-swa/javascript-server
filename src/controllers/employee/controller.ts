@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import EmployeeRepo from '../../repositories/employee/EmployeeRepo';
-import Iemployee from '../../entities/IEmployee';
+import IEmployee from '../../entities/IEmployee';
+import constants from './constants';
 
 class EmployeeController {
 
@@ -20,26 +21,35 @@ class EmployeeController {
     }
 
     public create = async (req: Request, res: Response, next: NextFunction) => {
+        const { errorMessages, successMessages } = constants;
         try {
             console.log('inside post method');
-            const createdEmployee: Iemployee = await this.employeeRepository.create(req.body);
-            if (! createdEmployee) {
+            const employeeToCreate: IEmployee[] = await this.employeeRepository.get({ name: req.body.name });
+            if (employeeToCreate.length) {
                 return next({
-                    error: 'Invalid parent',
-                    message: 'Parent does not exist',
+                    error: errorMessages.DUPLICATE_REQUEST,
+                    message: errorMessages.DUPLICATE_REQUEST_MESSAGE,
+                    status: 400
+                });
+            }
+            const createdEmployee: IEmployee = await this.employeeRepository.create(req.body);
+            if (!createdEmployee) {
+                return next({
+                    error: errorMessages.INVALID_PARENT,
+                    message: errorMessages.INVALID_PARENT_MESSAGE,
                     status: 400
                 });
             }
             res.status(200).send({
-                message: 'Employee created successfully',
+                message: successMessages.SUCCESSFULL_CREATION,
                 data: createdEmployee,
-                status: 'success'
+                status: successMessages.SUCCESS_STATUS
             });
         }
         catch (err) {
             console.log('err', err);
             return next({
-                error: 'bad request',
+                error: errorMessages.BAD_RESQUEST,
                 message: err,
                 status: 400
             });
@@ -47,31 +57,32 @@ class EmployeeController {
     }
 
     public get = async (req: Request, res: Response, next: NextFunction) => {
+        const { errorMessages, successMessages } = constants;
         try {
             console.log('inside get method');
-            const employees: Iemployee[] = await this.employeeRepository.get({});
+            const employees: IEmployee[] = await this.employeeRepository.get({});
             const countTotal: number = await this.employeeRepository.count();
             if (! countTotal) {
                 return next({
-                    error: 'No data',
-                    message: 'No employees found',
+                    error: errorMessages.NO_DATA,
+                    message: errorMessages.NOT_FOUND_MESSAGE,
                     status: 404
                 });
             }
                 res.status(200).send({
-                message: 'Employees fethed successfully',
+                message: successMessages.SUCCESSFULLY_FETCHED,
                 data: {
                     total: countTotal,
                     employees
                 },
-                status: 'success'
+                status: successMessages.SUCCESS_STATUS
             });
 
         }
         catch (err) {
 
             return next({
-                error: 'bad request',
+                error: errorMessages.BAD_RESQUEST,
                 message: err,
                 status: 400
             });
