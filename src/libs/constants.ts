@@ -29,3 +29,21 @@ export const trainerSeedData = {
     role: 'head-trainer',
     password: configuration.trainerPassword
 };
+
+export const permissionSeedData = {
+    email: 'superadmin@successive.tech',
+    resources: {
+        trainee: ['create', 'read', 'update', 'delete' ],
+        employee: ['create', 'read', 'update', 'delete' ],
+        permissions: ['create', 'read', 'update', 'delete' ],
+    },
+
+};
+
+export const employeeSeedData = {
+    name: 'employee 1',
+    role: 'CEO',
+    parent: '',
+    ancestors: []
+
+};
