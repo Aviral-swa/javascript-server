@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { permissionsModel } from './PermissionsModel';
 import IPermissionsModel from './IPermissionsModel';
 import IPermissions from '../../entities/IPermissions';
+import IUpdate from '../../entities/IUpdate';
 import VersionableRepository from '../versionable/VersionableRepository';
 
 export default class PermissionsRepository extends VersionableRepository<IPermissionsModel, mongoose.Model<IPermissionsModel>> {
@@ -19,6 +20,14 @@ export default class PermissionsRepository extends VersionableRepository<IPermis
 
     public get(query: any, options: any): Promise<IPermissionsModel[]> {
         return super.get(query, options);
+    }
+
+    public update(data: IUpdate): Promise<IPermissionsModel> {
+        return super.update(data);
+    }
+
+    public delete(id: string): Promise<IPermissionsModel> {
+        return super.delete(id);
     }
 
     public count() {

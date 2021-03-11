@@ -63,7 +63,7 @@ traineeRouter.route('/')
      *     tags:
      *       - trainee
      */
-    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), TraineeController.get)
+    .get(authMiddleWare('trainee', 'read'), validationHandler(config.get), TraineeController.get)
     /**
      * @swagger
      * /trainee/:
@@ -96,7 +96,7 @@ traineeRouter.route('/')
      *     tags:
      *       - trainee
      */
-    .post(authMiddleWare('getUsers', 'write'), validationHandler(config.create), TraineeController.create)
+    .post(authMiddleWare('trainee', 'create'), validationHandler(config.create), TraineeController.create)
     /**
      * @swagger
      * /trainee/:
@@ -127,7 +127,7 @@ traineeRouter.route('/')
      *      tags:
      *        - trainee
      */
-    .put(authMiddleWare('getUsers', 'all'), validationHandler(config.update), TraineeController.update);
+    .put(authMiddleWare('trainee', 'update'), validationHandler(config.update), TraineeController.update);
 
 
 traineeRouter.route('/:id')
@@ -156,6 +156,6 @@ traineeRouter.route('/:id')
      *     tags:
      *       - trainee
      */
-    .delete(authMiddleWare('getUsers', 'delete'), validationHandler(config.delete), TraineeController.delete);
+    .delete(authMiddleWare('trainee', 'delete'), validationHandler(config.delete), TraineeController.delete);
 
 export default traineeRouter;

@@ -9,7 +9,7 @@ const config = {
         email: {
             required: true,
             string: true,
-            regex: /\w+@successive.tech$/i,
+            regex: /\w+[@][a-z]+[.][a-z]+$/i,
             in: ['body'],
             errorMessage: 'email is required',
         },
