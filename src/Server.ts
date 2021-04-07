@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import { errorHandler, notFoundRoute } from './libs/routes';
 import routes from './router';
 import Database from './libs/database';
@@ -47,7 +46,7 @@ class Server {
 
     public initBodyParser() {
         const { app } = this;
-        app.use(bodyParser.json());
+        app.use(express.json());
     }
 
     public run() {

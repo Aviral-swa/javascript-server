@@ -5,6 +5,8 @@ import { createHash } from '../../libs/helper';
 import { ITrainee } from '../../entities';
 import { traineepermissionSeedData } from '../../libs/constants';
 import IPermissions  from '../../entities/IPermissions';
+import constants from './constants';
+
 class TraineeController {
 
     static instance: TraineeController;
@@ -46,30 +48,30 @@ class TraineeController {
             const usersInPage: number = trainees.length;
             if (usersInPage === 0) {
                 return res.status(200).send({
-                    message: 'No more trainees',
+                    message: constants.errorMessages.NO_TRAINEES,
                     data: {
                         total: totalCount,
                         showing: usersInPage,
                         traineesList: [],
                     },
-                    status: 'success'
+                    status: constants.successMessages.SUCCESS_STATUS
                 });
             }
                 res.status(200).send({
-                message: 'trainees fethed successfully',
+                message: constants.successMessages.SUCCESSFULLY_FETCHED,
                 data: {
                     total: totalCount,
                     showing: usersInPage,
                     traineesList: trainees,
                 },
-                status: 'success'
+                status: constants.successMessages.SUCCESS_STATUS
             });
 
         }
         catch (err) {
 
             return next({
-                error: 'bad request',
+                error: constants.errorMessages.BAD_RESQUEST,
                 message: err,
                 status: 400
             });
@@ -79,22 +81,30 @@ class TraineeController {
     public create = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside post method');
-            const { password, ...rest }  = req.body;
+            const { password, email, ...rest }  = req.body;
+            const traineeToCreate: ITrainee = await this.traineeRepository.findOne({ email });
+            if (traineeToCreate) {
+                return next({
+                    error: constants.errorMessages.DUPLICATE_REQUEST,
+                    message: constants.errorMessages.DUPLICATE_REQUEST_MESSAGE,
+                    status: 400
+                });
+            }
             const hashPass = await createHash(password);
             const { role } = res.locals;
-            const newUser = {...rest, password: hashPass, role};
+            const newUser = {...rest, email, password: hashPass, role};
             const createdUser: ITrainee = await this.traineeRepository.create(newUser);
             traineepermissionSeedData.email = createdUser.email;
             this.permissionRepo.create(traineepermissionSeedData);
             res.status(200).send({
-                message: 'trainee created successfully',
+                message: constants.successMessages.SUCCESSFULLY_CREATED,
                 data: createdUser,
-                status: 'success'
+                status: constants.successMessages.SUCCESS_STATUS
             });
         }
         catch (err) {
             return next({
-                error: 'bad request',
+                error: constants.errorMessages.BAD_RESQUEST,
                 message: err,
                 status: 400
             });
@@ -105,28 +115,28 @@ class TraineeController {
         try {
             console.log('inside put method');
             let newPassword: string;
-            const { dataToUpdate: {password, ...rest}, originalId } = req.body;
+            const { dataToUpdate: { password } } = req.body;
             if (password) {
                 newPassword = await createHash(password);
-                req.body.password = newPassword;
+                req.body.dataToUpdate.password = newPassword;
             }
             const updatedUser: ITrainee = await this.traineeRepository.update(req.body);
             if (!updatedUser) {
                 return next({
-                    error: 'invalid originalId',
-                    message: 'trainee not found ',
+                    error: constants.errorMessages.INVALID_ID,
+                    message: constants.errorMessages.NOT_FOUND,
                     status: 404
                 });
             }
             res.status(200).send({
-                message: 'trainees updated successfully',
+                message: constants.successMessages.SUCCESSFULL_UPDATE,
                 data: updatedUser,
-                status: 'success'
+                status: constants.successMessages.SUCCESS_STATUS
             });
         }
         catch (err) {
             return next({
-                error: 'bad request',
+                error: constants.errorMessages.BAD_RESQUEST,
                 message: err,
                 status: 400
             });
@@ -137,26 +147,25 @@ class TraineeController {
         try {
             console.log('inside delete method');
             const delTrainee: ITrainee = await this .traineeRepository.findOne({originalId: req.params.id});
-            const delTraineePermission: IPermissions = await this.permissionRepo.findOne({email: delTrainee.email});
-            const deletedTrainee: ITrainee = await this.traineeRepository.delete(req.params.id);
-            this.permissionRepo.delete(delTraineePermission.originalId);
-            if (! deletedTrainee) {
+            if (!delTrainee) {
                 return next({
-                    error: 'invalid originalId',
-                    message: 'trainee not found ',
-                    status: 404
+                    error: constants.errorMessages.INVALID_ID,
+                    message: constants.errorMessages.NOT_FOUND,
+                    status: 400
                 });
             }
+            const delTraineePermission: IPermissions = await this.permissionRepo.findOne({email: delTrainee.email});
+            await this.traineeRepository.delete(req.params.id);
+            this.permissionRepo.delete(delTraineePermission.originalId);
             res.status(200).send({
-                message: 'trainee deleted successfully',
+                message: constants.successMessages.SUCCESSFULLY_DELETED,
                 data: req.params.id,
-                status: 'success'
+                status: constants.successMessages.SUCCESS_STATUS
             });
         }
         catch (err) {
-
             return next({
-                error: 'bad request',
+                error: constants.errorMessages.BAD_RESQUEST,
                 message: err,
                 status: 400
             });

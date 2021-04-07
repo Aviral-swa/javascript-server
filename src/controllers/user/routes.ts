@@ -25,7 +25,7 @@ userRouter.route('/me')
      *     security:
      *       - ApiKeyAuth: []
      */
-    .get(authMiddleWare('getUsers', 'read'), validationHandler(config.get), UserController.me);
+    .get(authMiddleWare('trainee', 'read'), validationHandler(config.get), UserController.me);
 userRouter.route('/login')
     /**
      * @swagger

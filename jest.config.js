@@ -12,14 +12,10 @@ module.exports = {
         '^.+\\.tsx?$': 'ts-jest',
         '^.+\\.js$': 'babel-jest'
     },
+    testResultsProcessor: 'jest-sonar-reporter',
     transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     testMatch: [
         '**/*.spec.ts'
     ],
-    testEnvironment: 'node',
-    coveragePathIgnorePatterns: [".*\\.d\\.ts"],
-    collectCoverageFrom: [
-        "src/**/**/*.{ts}",
-        "!src/index.ts"
-    ]
+    testEnvironment: 'node'
 };
