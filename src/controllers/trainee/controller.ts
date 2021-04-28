@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import { IRequest } from '../../libs/interfaces';
 import TraineeRepository from '../../repositories/trainee/TraineeRepository';
+import PermissionsRepository from '../../repositories/permissions/PermissionsRepository';
 import { createHash } from '../../libs/helper';
 import { ITrainee } from '../../entities';
+import { traineepermissionSeedData } from '../../libs/constants';
+import IPermissions  from '../../entities/IPermissions';
 class TraineeController {
 
     static instance: TraineeController;
@@ -15,8 +19,10 @@ class TraineeController {
         return TraineeController.instance;
     }
     private traineeRepository: TraineeRepository;
+    private permissionRepo: PermissionsRepository;
     constructor() {
         this.traineeRepository = new TraineeRepository();
+        this.permissionRepo = new PermissionsRepository();
     }
 
 
@@ -79,6 +85,8 @@ class TraineeController {
             const { role } = res.locals;
             const newUser = {...rest, password: hashPass, role};
             const createdUser: ITrainee = await this.traineeRepository.create(newUser);
+            traineepermissionSeedData.email = createdUser.email;
+            this.permissionRepo.create(traineepermissionSeedData);
             res.status(200).send({
                 message: 'trainee created successfully',
                 data: createdUser,
@@ -126,17 +134,27 @@ class TraineeController {
         }
     }
 
-    public delete = async (req: Request, res: Response, next: NextFunction) => {
+    public delete = async (req: IRequest, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
+            const delTrainee: ITrainee = await this.traineeRepository.findOne({originalId: req.params.id});
+            const delTraineePermission: IPermissions = await this.permissionRepo.findOne({email: delTrainee.email});
+            if (req.user.originalId === req.params.id) {
+                return next({
+                    error: 'bad request',
+                    message: 'You cannot delete yourself',
+                    status: 404
+                });
+            }
             const deletedTrainee: ITrainee = await this.traineeRepository.delete(req.params.id);
-            if (! deletedTrainee) {
+            if (!deletedTrainee) {
                 return next({
                     error: 'invalid originalId',
                     message: 'trainee not found ',
                     status: 404
                 });
             }
+            this.permissionRepo.delete(delTraineePermission.originalId);
             res.status(200).send({
                 message: 'trainee deleted successfully',
                 data: req.params.id,

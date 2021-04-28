@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { configuration } from '../../config';
 import UserRepository from '../../repositories/user/UserRepository';
+import TraineeRepository from '../../repositories/trainee/TraineeRepository';
 import { IRequest } from '../../libs/interfaces';
 import { payload } from './constants';
 import { IUser } from '../../entities';
@@ -50,14 +51,15 @@ class UserController {
             const secretKey = configuration.secret_key;
             payload.email = req.body.email;
             const currentUser: IUser = await UserRepository.findOne({email: req.body.email});
-            if (!currentUser) {
+            const currentTrainee: IUser = await TraineeRepository.findOne({email: req.body.email});
+            if (!currentUser && !currentTrainee) {
                 next({
                     message: 'Email is not registered',
                     error: 'Unauthorized Access',
                     status: 403
                 });
             }
-            const passwordMatch = await bcrypt.compare(req.body.password, currentUser.password);
+            const passwordMatch = await bcrypt.compare(req.body.password, (currentUser?.password || currentTrainee?.password));
             if (passwordMatch) {
                 const token = jwt.sign(payload, secretKey, { expiresIn: '900s' });
                  return res.status(200).send({
