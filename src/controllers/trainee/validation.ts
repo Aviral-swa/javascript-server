@@ -20,9 +20,10 @@ const config = {
             regex: /[a-z]+/i,
         },
         role: {
-            required: true,
+            required: false,
             string: true,
             in: ['body'],
+            default: 'trainee'
         },
     },
 

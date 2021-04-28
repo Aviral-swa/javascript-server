@@ -43,8 +43,8 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         return await this.model.updateOne(query , data);
     }
     public async invalidateUpdate(id: string): Promise<D> {
-        const query: any = {originalId: id, deletedAt: undefined, updatedAt: undefined};
-        const data: any = {deletedAt: Date.now(), updatedAt: Date.now()};
+        const query: any = {originalId: id, deletedAt: undefined};
+        const data: any = {deletedAt: Date.now()};
         return await this.model.updateOne(query , data);
     }
     public async update(data: any): Promise<D> {

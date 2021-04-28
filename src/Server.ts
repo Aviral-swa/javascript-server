@@ -5,6 +5,7 @@ import routes from './router';
 import Database from './libs/database';
 import * as swaggerUi from 'swagger-ui-express';
 import swaggerDocuments from './swaggerDefinitions';
+import * as cors from 'cors';
 
 class Server {
     private app: any;
@@ -12,7 +13,16 @@ class Server {
         this.app = express();
     }
 
+    public corsParser() {
+        const corsOptions = {
+            origin: '*',
+            optionsSuccessStatus: 200
+          };
+        this.app.use(cors(corsOptions));
+    }
+
     public bootstrap() {
+        this.corsParser();
         this.initBodyParser();
         this.setupRoutes();
         return this.app;

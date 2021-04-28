@@ -40,10 +40,14 @@ class TraineeController {
             const [totalCount, trainees ] = await Promise.all([countTotal, trainee]);
             const usersInPage: number = trainees.length;
             if (usersInPage === 0) {
-                return next({
-                    error: 'bad request',
-                    message: 'no records found',
-                    status: 400
+                return res.status(200).send({
+                    message: 'No more trainees',
+                    data: {
+                        total: totalCount,
+                        showing: usersInPage,
+                        traineesList: [],
+                    },
+                    status: 'success'
                 });
             }
                 res.status(200).send({
@@ -72,7 +76,8 @@ class TraineeController {
             console.log('inside post method');
             const { password, ...rest }  = req.body;
             const hashPass = await createHash(password);
-            const newUser = {...rest, password: hashPass};
+            const { role } = res.locals;
+            const newUser = {...rest, password: hashPass, role};
             const createdUser: ITrainee = await this.traineeRepository.create(newUser);
             res.status(200).send({
                 message: 'trainee created successfully',
@@ -96,9 +101,9 @@ class TraineeController {
             const { dataToUpdate: {password, ...rest}, originalId } = req.body;
             if (password) {
                 newPassword = await createHash(password);
+                req.body.password = newPassword;
             }
-            const newUser = { originalId, dataToUpdate: { password: newPassword, ...rest }};
-            const updatedUser: ITrainee = await this.traineeRepository.update(newUser);
+            const updatedUser: ITrainee = await this.traineeRepository.update(req.body);
             if (!updatedUser) {
                 return next({
                     error: 'invalid originalId',
@@ -124,7 +129,8 @@ class TraineeController {
     public delete = async (req: Request, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
-            if (! await this.traineeRepository.delete(req.params.id)) {
+            const deletedTrainee: ITrainee = await this.traineeRepository.delete(req.params.id);
+            if (! deletedTrainee) {
                 return next({
                     error: 'invalid originalId',
                     message: 'trainee not found ',
@@ -133,7 +139,7 @@ class TraineeController {
             }
             res.status(200).send({
                 message: 'trainee deleted successfully',
-                data: {},
+                data: req.params.id,
                 status: 'success'
             });
         }
