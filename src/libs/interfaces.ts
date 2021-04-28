@@ -23,7 +23,7 @@ export interface IRequest extends Request {
 }
 
 type User = {
-    _id: string;
+    _id?: string;
     name: string;
     email: string;
     role: string;

@@ -4,7 +4,7 @@ import { userSeed, traineeSeed } from './seedData';
 class Database {
 
     public static open(mongoURL) {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             const options = {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
