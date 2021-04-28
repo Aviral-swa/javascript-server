@@ -39,10 +39,10 @@ beforeAll(async () => {
     Database.disconnect();
 });
 
-describe('Employee Get API', () => {
-    it('should return all employees', async () => {
+describe('Permission Get API', () => {
+    it('should return all permissions', async () => {
         return request
-            .get('/api/employee')
+            .get('/api/permission')
             .set('Authorization', authToken)
             .expect('Content-Type', /json/)
             .expect(200)
@@ -52,52 +52,40 @@ describe('Employee Get API', () => {
     });
 });
 
-describe('Employee Post API', () => {
-    it('should create a new employee', async () => {
+describe('Permission Put API', () => {
+    it('should update permission', async () => {
         return request
-            .post('/api/employee')
+            .put('/api/permission')
             .set('Authorization', authToken)
-            .send({
-                name: 'employee 23',
-                role: 'tech lead',
-                parent: 'employee 11'
-            })
+            .send(constants.testData)
             .expect('Content-Type', /json/)
             .expect(200)
             .then((res) => {
-            expect(res.body.data.name).toBe('employee 23');
+            expect(res.body.status).toBe(constants.successMessages.SUCCESS_STATUS);
             });
     });
 
-    it('should respond with Duplicate request', async () => {
+    it('should respond with not found permission', async () => {
         return request
-            .post('/api/employee')
+            .put('/api/permission')
             .set('Authorization', authToken)
-            .send({
-                name: 'employee 23',
-                role: 'tech lead',
-                parent: 'employee 11'
-            })
+            .send(constants.wrongTestData)
             .expect('Content-Type', /json/)
             .expect(400)
             .then((res) => {
-            expect(res.body.error).toBe(constants.errorMessages.DUPLICATE_REQUEST);
+            expect(res.body.message).toBe(constants.errorMessages.NOT_FOUND);
             });
     });
 
-    it('should respond with Invalid parent', async () => {
+    it('should respond with bad request', async () => {
         return request
-            .post('/api/employee')
+            .put('/api/permission')
             .set('Authorization', authToken)
-            .send({
-                name: 'employee 99',
-                role: 'tech lead',
-                parent: 'employee 199'
-            })
+            .send(constants.badTestData)
             .expect('Content-Type', /json/)
             .expect(400)
             .then((res) => {
-            expect(res.body.error).toBe(constants.errorMessages.INVALID_PARENT);
+            expect(res.body.error).toBe(constants.errorMessages.BAD_RESQUEST);
             });
     });
 });

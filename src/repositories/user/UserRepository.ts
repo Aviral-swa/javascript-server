@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { DocumentQuery, Query } from 'mongoose';
 import { userModel } from './UserModel';
 import IUserModel from './IUserModel';
 import VersionableRepository from '../versionable/VersionableRepository';
@@ -30,7 +29,7 @@ export default class UserRepository extends VersionableRepository<IUserModel, mo
         return super.count(query);
     }
 
-    public static findOne(query: IQuery): DocumentQuery<IUserModel, IUserModel, {}> {
+    public static findOne(query: IQuery): Promise<IUserModel> {
         return userModel.findOne(query).lean();
     }
 }

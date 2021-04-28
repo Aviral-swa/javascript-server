@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import EmployeeController from './controller';
+import PermissionController from './controller';
 import authMiddleWare from '../../libs/routes/authMiddleWare';
 
-const employeeRouter = Router();
+const permissionRouter = Router();
 
-employeeRouter.route('/')
+permissionRouter.route('/')
 
     /**
      * @swagger
-     * /employee/:
-     *   post:
-     *     summary: Creates a employee
-     *     description: Creates an employee (Node) by accepting 3 parameters - name, role, parent.
+     * /permission/:
+     *   put:
+     *     summary: Updates permissions
+     *     description: Updates permissions for users.
      *     parameters:
      *       - name: data
      *         in: body
@@ -28,7 +28,7 @@ employeeRouter.route('/')
      *       '200':
      *         description: successful Operation
      *         schema:
-     *           $ref: '#/definitions/PostApiSuccess'
+     *           $ref: '#/definitions/UpdatePermissionSuccess'
      *       '400':
      *         description: Bad Request
      *         schema:
@@ -36,22 +36,22 @@ employeeRouter.route('/')
      *     security:
      *       - ApiKeyAuth: []
      *     tags:
-     *       - employee
+     *       - permission
      */
 
-    .post(authMiddleWare('employee', 'create'), EmployeeController.create)
+    .put(authMiddleWare('permissions', 'update'), PermissionController.update)
 
     /**
      * @swagger
-     * /employee/:
+     * /permission/:
      *   get:
-     *     summary: Finds employees
-     *     description: Gives a total count of employees in database and fetches all the data.
+     *     summary: Returns all permissions.
+     *     description: Gives permissions of each user.
      *     responses:
      *       '200':
      *         description: Successful Operation
      *         schema:
-     *           $ref: '#/definitions/GetApiSuccess'
+     *           $ref: '#/definitions/GetPermissionSuccess'
      *       '400':
      *         description: Bad Request
      *         schema:
@@ -59,9 +59,9 @@ employeeRouter.route('/')
      *     security:
      *       - ApiKeyAuth: []
      *     tags:
-     *       - employee
+     *       - permission
      */
 
-    .get(authMiddleWare('employee', 'read'), EmployeeController.get);
+    .get(authMiddleWare('permissions', 'read'), PermissionController.get);
 
-export default employeeRouter;
+export default permissionRouter;

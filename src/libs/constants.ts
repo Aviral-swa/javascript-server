@@ -17,10 +17,10 @@ export const permissions: IPermissions = {
     }
 };
 
-export const traineeSeedData = {
-    name: 'Aviral Swarnkar',
-    email: 'aviral.swarnkar@successive.tech',
-    role: 'trainee',
+export const adminSeedData = {
+    name: 'Super Admin',
+    email: 'sadmin@successive.tech',
+    role: 'admin',
     password: configuration.traineePassword
 };
 export const trainerSeedData = {
@@ -28,4 +28,42 @@ export const trainerSeedData = {
     email: 'trainer@successive.tech',
     role: 'head-trainer',
     password: configuration.trainerPassword
+};
+
+export const adminpermissionSeedData = {
+    email: 'sadmin@successive.tech',
+    resources: {
+        trainee: ['create', 'read', 'update', 'delete' ],
+        employee: ['create', 'read', 'update', 'delete' ],
+        permissions: ['create', 'read', 'update', 'delete' ],
+    },
+
+};
+
+export const trainerpermissionSeedData = {
+    email: 'trainer@successive.tech',
+    resources: {
+        trainee: ['create', 'read', 'update' ],
+        employee: ['create', 'read', 'update' ],
+        permissions: ['read' ],
+    },
+
+};
+
+export const traineepermissionSeedData = {
+    email: 'trainee@successive.tech',
+    resources: {
+        trainee: ['read' ],
+        employee: ['read' ],
+        permissions: ['read' ],
+    },
+
+};
+
+export const employeeSeedData = {
+    name: 'employee 1',
+    role: 'CEO',
+    parent: '',
+    ancestors: []
+
 };

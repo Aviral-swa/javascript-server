@@ -16,7 +16,7 @@ export default class EmployeeRepository {
                 _id: id,
                 ...data,
             });
-            return await model.save();
+            return model.save();
         }
         const parent = await employeeModel.findOne({
             name: {
@@ -26,16 +26,16 @@ export default class EmployeeRepository {
         if (!parent) return undefined;
         const parentAncestors = parent.ancestors;
         parentAncestors.push(data.parent);
-        const model = new employeeModel({
+        const eModel = new employeeModel({
             _id: id,
             ancestors: parentAncestors,
             ...data,
         });
-        return await model.save();
+        return eModel.save();
     }
 
     public async get(query: any): Promise<IEmployeeModel[]> {
-        return await employeeModel.find(query);
+        return employeeModel.find(query);
     }
 
     public count() {

@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { DocumentQuery, Query } from 'mongoose';
 import { traineeModel } from './TraineeModel';
 import ITraineeModel from './ITraineeModel';
 import VersionableRepository from '../versionable/VersionableRepository';
@@ -30,7 +29,7 @@ export default class TraineeRepository extends VersionableRepository<ITraineeMod
         return super.count(query);
     }
 
-    public static findOne(query: IQuery): DocumentQuery<ITraineeModel, ITraineeModel, {}> {
+    public static findOne(query: IQuery): Promise<ITraineeModel> {
         return traineeModel.findOne(query).lean();
     }
 }

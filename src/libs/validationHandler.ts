@@ -27,7 +27,7 @@ export default (config) => (
         }
         if (
             (((keys.number) && !(Number.isInteger(Number(request)))) ||
-            ((keys.string) && (!(typeof request === 'string') || Number(request))))
+            ((keys.string) && (typeof request !== 'string' || Number(request))))
         ) {
             const err = {
                 key: `${key}`,
@@ -36,7 +36,7 @@ export default (config) => (
                 };
             return errors.push(err);
         }
-        if ((keys.isObject) && !(typeof(request) === 'object')) {
+        if ((keys.isObject) && (typeof(request) !== 'object')) {
             const err = {
                 key: `${key}`,
                 location: `${keys.in}`,

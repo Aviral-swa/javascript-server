@@ -39,65 +39,50 @@ beforeAll(async () => {
     Database.disconnect();
 });
 
-describe('Employee Get API', () => {
-    it('should return all employees', async () => {
+describe('User Post Api', () => {
+    it('should return not registered', async () => {
         return request
-            .get('/api/employee')
+            .post('/api/user/login')
+            .send(constants.notRegisteredData)
+            .expect('Content-Type', /json/)
+            .expect(403)
+            .then((res) => {
+            expect(res.body.message).toBe(constants.errorMessages.NOT_REGISTERED);
+            });
+    });
+
+    it('should respond with incorrect password', async () => {
+        return request
+            .post('/api/user/login')
+            .send(constants.incorrectPassData)
+            .expect('Content-Type', /json/)
+            .expect(403)
+            .then((res) => {
+            expect(res.body.message).toBe(constants.errorMessages.INCORRECT_PASSWORD);
+            });
+    });
+
+    it('should login successfully', async () => {
+        return request
+            .post('/api/user/login')
+            .send(constants.testData)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+            expect(res.body.message).toBe(constants.successMessages.SUCCESSFULLY_CREATED);
+            });
+    });
+});
+
+describe('User Get API', () => {
+    it('should return the current loged-in user', async () => {
+        return request
+            .get('/api/user/me')
             .set('Authorization', authToken)
             .expect('Content-Type', /json/)
             .expect(200)
             .then((res) => {
             expect(res.body.message).toBe(constants.successMessages.SUCCESSFULLY_FETCHED);
-            });
-    });
-});
-
-describe('Employee Post API', () => {
-    it('should create a new employee', async () => {
-        return request
-            .post('/api/employee')
-            .set('Authorization', authToken)
-            .send({
-                name: 'employee 23',
-                role: 'tech lead',
-                parent: 'employee 11'
-            })
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .then((res) => {
-            expect(res.body.data.name).toBe('employee 23');
-            });
-    });
-
-    it('should respond with Duplicate request', async () => {
-        return request
-            .post('/api/employee')
-            .set('Authorization', authToken)
-            .send({
-                name: 'employee 23',
-                role: 'tech lead',
-                parent: 'employee 11'
-            })
-            .expect('Content-Type', /json/)
-            .expect(400)
-            .then((res) => {
-            expect(res.body.error).toBe(constants.errorMessages.DUPLICATE_REQUEST);
-            });
-    });
-
-    it('should respond with Invalid parent', async () => {
-        return request
-            .post('/api/employee')
-            .set('Authorization', authToken)
-            .send({
-                name: 'employee 99',
-                role: 'tech lead',
-                parent: 'employee 199'
-            })
-            .expect('Content-Type', /json/)
-            .expect(400)
-            .then((res) => {
-            expect(res.body.error).toBe(constants.errorMessages.INVALID_PARENT);
             });
     });
 });
