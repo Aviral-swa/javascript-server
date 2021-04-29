@@ -43,6 +43,10 @@ class Server {
 
         app.use(errorHandler);
 
+        app.use('/', (req, res) => {
+            res.send('Server is running successfully. Go to "/api-docs" for swagger documentation');
+        });
+
     }
 
     public initBodyParser() {
@@ -54,11 +58,11 @@ class Server {
         const { port, mongo_url} = this.configuration;
         Database.open(mongo_url)
             .then((res) => {
-                this.app.listen(port, err => {
+                this.app.listen(process.env.PORT || port, err => {
                     if (err) {
                         console.log(`Error: app failed  ${err}`);
                     }
-                    console.log(`app is running on port ${port}`);
+                    console.log(`app is running`);
                 });
             })
             .catch((err) => {
