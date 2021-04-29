@@ -1,6 +1,9 @@
 import UserRepository from '../repositories/user/UserRepository';
 import TraineeRepository from '../repositories/trainee/TraineeRepository';
-import { traineeSeedData, trainerSeedData } from './constants';
+import EmployeeRepository from '../repositories/employee/EmployeeRepo';
+import PermissionsRepository from '../repositories/permissions/PermissionsRepository';
+import { adminSeedData, trainerSeedData, employeeSeedData,
+         adminpermissionSeedData, trainerpermissionSeedData, traineepermissionSeedData } from './constants';
 import { createHash } from './helper';
 
 const userRepository: UserRepository = new UserRepository();
@@ -9,12 +12,9 @@ export async function userSeed() {
     if (count === 0) {
         try {
             console.log('Seeding Data');
-            const traineeHash = await createHash(traineeSeedData.password);
-            traineeSeedData.password = traineeHash;
-            const trainerHash = await createHash(trainerSeedData.password);
-            trainerSeedData.password = trainerHash;
-            userRepository.create(traineeSeedData);
-            userRepository.create(trainerSeedData);
+            const traineeHash = await createHash(adminSeedData.password);
+            adminSeedData.password = traineeHash;
+            userRepository.create(adminSeedData);
 
         } catch (err) {
             console.log(err);
@@ -27,13 +27,36 @@ export async function traineeSeed() {
     if (count === 0) {
         try {
             console.log('Seeding Data');
-            const traineeHash = await createHash(traineeSeedData.password);
-            traineeSeedData.password = traineeHash;
             const trainerHash = await createHash(trainerSeedData.password);
             trainerSeedData.password = trainerHash;
-            traineeRepository.create(traineeSeedData);
             traineeRepository.create(trainerSeedData);
 
+        } catch (err) {
+            console.log(err);
+        }
+    }
+}
+const permissionsRepository: PermissionsRepository = new PermissionsRepository();
+export async function permissionsSeed() {
+    const count = await permissionsRepository.count();
+    if (count === 0) {
+        try {
+            console.log('Seeding Data');
+            permissionsRepository.create(adminpermissionSeedData);
+            permissionsRepository.create(trainerpermissionSeedData);
+            permissionsRepository.create(traineepermissionSeedData);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+}
+const employeeRepository: EmployeeRepository = new EmployeeRepository();
+export async function employeeSeed() {
+    const count = await employeeRepository.count();
+    if (count === 0) {
+        try {
+            console.log('Seeding Data');
+            employeeRepository.create(employeeSeedData);
         } catch (err) {
             console.log(err);
         }

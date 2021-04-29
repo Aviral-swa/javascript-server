@@ -1,12 +1,13 @@
 import * as jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { default as hasPermissions } from '../hasPermissions';
 import configuration from '../../config/configuration';
 import UserRepository from '../../repositories/user/UserRepository';
+import TraineeRepository from '../../repositories/trainee/TraineeRepository';
 import { IRequest } from '../interfaces';
-import { IUser } from '../../entities';
+import { IUser, ITrainee } from '../../entities';
+import { isAuthorized } from '../helper';
 
-export default (module: string, permissionType: string) => async (
+export default (attrb: string, permissionType: string) => async (
     req: IRequest,
     res: Response,
     next: NextFunction
@@ -15,6 +16,7 @@ export default (module: string, permissionType: string) => async (
     const auth = 'authorization';
     const token = req.headers[auth];
     let dbUser: IUser;
+    let dbTrainee: ITrainee;
     if (!token) {
         next({
             message: 'Token not found',
@@ -32,8 +34,9 @@ export default (module: string, permissionType: string) => async (
             });
         }
         dbUser = await UserRepository.findOne({email: user.email});
-        req.user = dbUser;
-        if (!hasPermissions(module, dbUser.role, permissionType)) {
+        dbTrainee = await TraineeRepository.findOne({email: user.email});
+        req.user = dbUser || dbTrainee;
+        if (!await isAuthorized((dbUser?.email || dbTrainee?.email), attrb, permissionType)) {
             next({
                 message: 'permission denied',
                 error: 'Unauthorized Access',

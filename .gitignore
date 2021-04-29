@@ -2,5 +2,8 @@ node_modules
 package-lock.json
 dist
 .env
+test-report.xml
 coverage
 .scannerwork
+-Dsonar.projectKey=javascrpt_server
+-Dsonar.sources=.
