@@ -22,7 +22,8 @@ const config = {
         role: {
             required: false,
             string: true,
-            in: ['body']
+            in: ['body'],
+            default: 'trainee',
         },
     },
 

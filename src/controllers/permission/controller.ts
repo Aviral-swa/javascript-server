@@ -59,7 +59,10 @@ class PermissionController {
         const { successMessages, errorMessages } = constants;
         try {
             console.log('inside get method');
-            const allPermissions: IPermissions[] = await this.permissionRepo.get({}, {});
+            const { email } = req.query;
+            const allPermissions: IPermissions[] = await this.permissionRepo.get(
+                email ? {email} : {},
+                {});
                 res.status(200).send({
                 message: successMessages.SUCCESSFULLY_FETCHED,
                 data: allPermissions,
