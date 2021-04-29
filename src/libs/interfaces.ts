@@ -24,6 +24,7 @@ export interface IRequest extends Request {
 
 type User = {
     _id?: string;
+    originalId?: string;
     name: string;
     email: string;
     role: string;

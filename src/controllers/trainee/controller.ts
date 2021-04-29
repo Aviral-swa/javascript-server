@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { IRequest } from '../../libs/interfaces';
 import TraineeRepository from '../../repositories/trainee/TraineeRepository';
 import PermissionsRepository from '../../repositories/permissions/PermissionsRepository';
 import { createHash } from '../../libs/helper';
@@ -143,19 +144,26 @@ class TraineeController {
         }
     }
 
-    public delete = async (req: Request, res: Response, next: NextFunction) => {
+    public delete = async (req: IRequest, res: Response, next: NextFunction) => {
         try {
             console.log('inside delete method');
-            const delTrainee: ITrainee = await this .traineeRepository.findOne({originalId: req.params.id});
-            if (!delTrainee) {
+            const delTrainee: ITrainee = await this.traineeRepository.findOne({originalId: req.params.id});
+            const delTraineePermission: IPermissions = await this.permissionRepo.findOne({email: delTrainee.email});
+            if (req.user.originalId === req.params.id) {
+                return next({
+                    error: 'bad request',
+                    message: 'You cannot delete yourself',
+                    status: 404
+                });
+            }
+            const deletedTrainee: ITrainee = await this.traineeRepository.delete(req.params.id);
+            if (!deletedTrainee) {
                 return next({
                     error: constants.errorMessages.INVALID_ID,
                     message: constants.errorMessages.NOT_FOUND,
                     status: 400
                 });
             }
-            const delTraineePermission: IPermissions = await this.permissionRepo.findOne({email: delTrainee.email});
-            await this.traineeRepository.delete(req.params.id);
             this.permissionRepo.delete(delTraineePermission.originalId);
             res.status(200).send({
                 message: constants.successMessages.SUCCESSFULLY_DELETED,
